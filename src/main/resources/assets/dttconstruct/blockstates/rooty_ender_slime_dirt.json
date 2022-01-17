@@ -1,6 +1,6 @@
 {
   "multipart": [
-    {   "apply": { "model": "tconstruct:block/ender_slime_dirt" }},
+    {   "apply": { "model": "tconstruct:block/slime/dirt/ender/dirt" }},
     {	"apply": { "model": "dynamictrees:block/roots" }}
   ]
 }

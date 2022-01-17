@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "tconstruct:block/slime_leaves" }
+    "": { "model": "tconstruct:block/slime/leaves" }
   }
 }

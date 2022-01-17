@@ -30,7 +30,6 @@ public class DTTConstructRegistries {
 
     @SubscribeEvent
     public static void registerLeavesPropertiesTypes (final TypeRegistryEvent<LeavesProperties> event) {
-        //event.registerType(new ResourceLocation(DynamicTreesTConstruct.MOD_ID, "blossom"), BlossomLeavesProperties.TYPE);
     }
 
     public static void setup() {
@@ -71,13 +70,10 @@ public class DTTConstructRegistries {
     }
 
     private static void setUpFruitSpecies (ResourceLocation tree, ResourceLocation fruit, FruitBlock fruitBlock) {
-//        Item fruitItem = ForgeRegistries.ITEMS.getValue(fruit);
-//        fruitBlock.setDroppedItem(new ItemStack(fruitItem));
-//        final Species treeSpecies = Species.REGISTRY.get(tree);
-//        if (treeSpecies.isValid()){
-//            treeSpecies.addDropCreator(new FruitDropCreator().setFruitItem(fruitItem));
-//            fruitBlock.setSpecies(treeSpecies);
-//        }
+        Item fruitItem = ForgeRegistries.ITEMS.getValue(fruit);
+        Species species = Species.REGISTRY.get(tree);
+        fruitBlock.setDroppedItem(new ItemStack(fruitItem));
+        if (species.isValid()) fruitBlock.setSpecies(species);
     }
 
 }

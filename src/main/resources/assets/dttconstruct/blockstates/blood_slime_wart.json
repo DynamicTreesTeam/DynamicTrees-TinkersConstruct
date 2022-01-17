@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "tconstruct:block/slime_wart" }
+    "": { "model": "tconstruct:block/slime/wart" }
   }
 }

@@ -1,6 +1,6 @@
 {
   "multipart": [
-    {   "apply": { "model": "tconstruct:block/grass/sky/slimy_grass" }},
+    {   "apply": { "model": "tconstruct:block/slime/dirt/sky/grass" }},
     {	"apply": { "model": "dynamictrees:block/roots" }}
   ]
 }

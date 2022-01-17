@@ -1,8 +1,8 @@
 {
-  "parent": "dynamictrees:block/smartmodel/sapling",
+  "parent": "dynamictrees:block/smartmodel/mushroom_round",
   "textures": {
-    "particle": "tconstruct:block/slime/slime_wart",
-    "log": "tconstruct:block/wood/bloodshroom/log",
-    "leaves": "tconstruct:block/slime/slime_wart"
+    "cap": "dttconstruct:block/bloodshroom_cap",
+    "stem": "dttconstruct:block/bloodshroom_cap",
+    "particle": "dttconstruct:block/bloodshroom_cap"
   }
 }

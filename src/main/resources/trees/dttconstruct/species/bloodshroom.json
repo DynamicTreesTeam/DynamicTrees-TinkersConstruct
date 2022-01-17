@@ -1,24 +1,43 @@
 {
+  "type": "nether_fungus",
   "family": "dttconstruct:bloodshroom",
-  "tapering": 0.3,
-  "signal_energy": 12.0,
-  "growth_rate": 0.8,
+  "tapering": 0,
+  "signal_energy": 16.0,
+  "up_probability": 6,
+  "lowest_branch_height": 3,
+  "growth_rate": 1,
+  "soil_longevity": 3,
+  "growth_logic_kit": "nether_fungus",
   "leaves_properties": "dttconstruct:blood_slime",
   "environment_factors" : {
-    "cold": 0.75,
-    "hot": 0.5,
-    "dry": 0.5,
-    "forest": 1.05
+    "cold": 0.5,
+    "wet": 0.8
   },
-  "seed_drop_rarity": 1.0,
-  "stick_drop_rarity": 0.0,
   "primitive_sapling": "tconstruct:blood_slime_sapling",
-  "acceptable_soils": [ "slime_like" ],
+  "acceptable_soils": [ "slime_like", "fungus_like", "dirt_like" ],
+  "acceptable_growth_blocks": ["tconstruct:blood_vanilla_slime_grass", "tconstruct:blood_earth_slime_grass", "tconstruct:blood_sky_slime_grass", "tconstruct:blood_ender_slime_grass", "tconstruct:blood_ichor_slime_grass"],
+  "sapling_shape": "round_mushroom",
   "features" : [
+    "clear_volume",
     {
-      "name": "fruit",
+      "name": "shroomlight",
       "properties": {
-        "fruit_block": "dttconstruct:blood_slime_fruit"
+        "shroomlight": "tconstruct:ichor_congealed_slime"
+      }
+    },
+    {
+      "name": "bottom_flare",
+      "properties": {
+        "min_radius": 7
+      }
+    }
+  ],
+  "drop_creators": [
+    "log",
+    {
+      "name": "wart_block",
+      "properties": {
+        "block": "tconstruct:blood_slime_leaves"
       }
     }
   ]

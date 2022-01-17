@@ -28,7 +28,22 @@ public class DynamicTreesTConstruct
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-        // do something that can only be done on the client
+//        if (DTConfigs.REPLACE_NYLIUM_FUNGI.get()) {
+//            replaceNyliumFungiFeatures();
+//        }
     }
+
+//    public static void replaceNyliumFungiFeatures() {
+//        TreeRegistry.findSpecies(new ResourceLocation(MOD_ID, "bloodshroom")).getSapling().ifPresent(bloodSapling ->
+//                replaceFeatureConfigs(((WeightedBlockStateProvider) Features.Configs.WARPED_FOREST_CONFIG.stateProvider), bloodSapling));
+//    }
+//
+//    private static void replaceFeatureConfigs(WeightedBlockStateProvider featureConfig, Block sapling) {
+//        for (final WeightedList.Entry<BlockState> entry : featureConfig.weightedList.entries) {
+//            if (entry.data.getBlock() == ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tconstruct", "blood_slime_sapling"))) {
+//                entry.data = sapling.defaultBlockState();
+//            }
+//        }
+//    }
 
 }

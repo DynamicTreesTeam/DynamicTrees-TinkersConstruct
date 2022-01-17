@@ -38,6 +38,7 @@ group = property("group")
 
 minecraft {
     mappings("official", mcVersion)
+    accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 
     runs {
         create("client") {
@@ -110,7 +111,8 @@ dependencies {
     // Not sure if we need this one, what is a "forge" anyway?
     minecraft("net.minecraftforge:forge:$mcVersion-${property("forgeVersion")}")
 
-    // Compile BYG and DT, of course.
+    // Compile TConstruct and DT, of course.
+    // TConstruct needs Mantle
     implementation(fg.deobf("curse.maven:mantle-74924:3576386"))
     implementation(fg.deobf("curse.maven:tinkers-construct-74072:3576393"))
     implementation(fg.deobf("com.ferreusveritas.dynamictrees:DynamicTrees-$mcVersion:${property("dynamicTreesVersion")}"))
@@ -130,9 +132,6 @@ dependencies {
 
     // At runtime, use CC for creating growth chambers.
     runtimeOnly(fg.deobf("org.squiddev:cc-tweaked-$mcVersion:${property("ccVersion")}"))
-
-    // At runtime, get rid of experimental settings warning screen.
-    runtimeOnly(fg.deobf("curse.maven:ShutUpExperimentalSettings-407174:3188120"))
 
     // At runtime, use suggestion provider fix mod.
     runtimeOnly(fg.deobf("com.harleyoconnor.suggestionproviderfix:SuggestionProviderFix:$mcVersion-${property("suggestionProviderFixVersion")}"))
