@@ -115,6 +115,7 @@ dependencies {
     // TConstruct needs Mantle
     implementation(fg.deobf("curse.maven:mantle-74924:3576386"))
     implementation(fg.deobf("curse.maven:tinkers-construct-74072:3576393"))
+    //implementation(files("libs/TConstruct-1.16.5-3.3.2-TestDT.DEV.bb16fbebc.jar"))
     implementation(fg.deobf("com.ferreusveritas.dynamictrees:DynamicTrees-$mcVersion:${property("dynamicTreesVersion")}"))
 
     /////////////////////////////////////////

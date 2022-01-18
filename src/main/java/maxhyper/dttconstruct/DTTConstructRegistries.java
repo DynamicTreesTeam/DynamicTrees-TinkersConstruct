@@ -5,7 +5,6 @@ import com.ferreusveritas.dynamictrees.api.registry.TypeRegistryEvent;
 import com.ferreusveritas.dynamictrees.blocks.FruitBlock;
 import com.ferreusveritas.dynamictrees.blocks.leaves.LeavesProperties;
 import com.ferreusveritas.dynamictrees.init.DTConfigs;
-import com.ferreusveritas.dynamictrees.systems.dropcreators.FruitDropCreator;
 import com.ferreusveritas.dynamictrees.trees.Species;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -15,6 +14,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import slimeknights.tconstruct.world.worldgen.islands.variants.ClayIslandVariant;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class DTTConstructRegistries {
