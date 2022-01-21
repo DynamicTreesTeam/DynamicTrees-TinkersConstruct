@@ -1,3 +1,15 @@
 {
+  "block.dttconstruct.bloodshroom_branch": "Bloodshroom Fungus",
+  "block.dttconstruct.greenheart_branch": "Greenheart Tree",
+  "block.dttconstruct.skyroot_branch": "Skyroot Tree",
 
+  "species.dttconstruct.bloodshroom": "Bloodshroom",
+  "species.dttconstruct.greenheart": "Greenheart",
+  "species.dttconstruct.enderslime": "Enderslime",
+  "species.dttconstruct.skyroot": "Skyroot",
+
+  "item.dttconstruct.bloodshroom_seed": "Bloodshroom Cap",
+  "item.dttconstruct.greenheart_seed": "Greenheart Seed",
+  "item.dttconstruct.enderslime_seed": "Enderslime Seed",
+  "item.dttconstruct.skyroot_seed": "Skyroot Seed"
 }
