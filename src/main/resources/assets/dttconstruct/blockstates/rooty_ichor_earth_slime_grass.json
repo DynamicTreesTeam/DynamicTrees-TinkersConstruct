@@ -1,0 +1,6 @@
+{
+  "multipart": [
+    {   "apply": { "model": "tconstruct:block/slime/dirt/earth/grass" }},
+    {	"apply": { "model": "dynamictrees:block/roots" }}
+  ]
+}

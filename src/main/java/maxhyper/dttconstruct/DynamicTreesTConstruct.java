@@ -1,13 +1,21 @@
 package maxhyper.dttconstruct;
 
+import com.ferreusveritas.dynamictrees.api.GatherDataHelper;
 import com.ferreusveritas.dynamictrees.api.registry.RegistryHandler;
+import com.ferreusveritas.dynamictrees.blocks.leaves.LeavesProperties;
+import com.ferreusveritas.dynamictrees.blocks.rootyblocks.SoilProperties;
 import com.ferreusveritas.dynamictrees.init.DTConfigs;
+import com.ferreusveritas.dynamictrees.resources.Resources;
+import com.ferreusveritas.dynamictrees.trees.Family;
+import com.ferreusveritas.dynamictrees.trees.Species;
 import maxhyper.dttconstruct.replacement.SlimeIslandReplacement;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import slimeknights.tconstruct.common.config.Config;
 
@@ -18,8 +26,11 @@ public class DynamicTreesTConstruct
     public static final String MOD_ID = "dttconstruct";
 
     public DynamicTreesTConstruct() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+        final IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        modBus.addListener(this::commonSetup);
+        modBus.addListener(this::clientSetup);
+        modBus.addListener(this::gatherData);
 
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -59,6 +70,18 @@ public class DynamicTreesTConstruct
 //            }
 //        }
 //    }
+
+    private void gatherData(final GatherDataEvent event) {
+        GatherDataHelper.gatherLootData(MOD_ID, event);
+//        GatherDataHelper.gatherAllData(
+//                MOD_ID,
+//                event,
+//                //SoilProperties.REGISTRY,
+//                Family.REGISTRY,
+//                Species.REGISTRY,
+//                LeavesProperties.REGISTRY
+//        );
+    }
 
     public static ResourceLocation resLoc(final String path) {
         return new ResourceLocation(MOD_ID, path);

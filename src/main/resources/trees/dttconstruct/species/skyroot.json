@@ -1,10 +1,11 @@
 {
   "family": "dttconstruct:skyroot",
-  "tapering": 0.25,
+  "tapering": 0.30,
   "signal_energy": 10.0,
   "growth_rate": 1.2,
   "lowest_branch_height": 5,
   "leaves_properties": "dttconstruct:sky_slime",
+  "drop_seeds": true,
   "growth_logic_kit": {
     "name": "conifer",
     "properties": {
@@ -20,22 +21,15 @@
   },
   "primitive_sapling": "tconstruct:sky_slime_sapling",
   "acceptable_soils": [ "slime_like" ],
+  "fruits": [
+    "dttconstruct:sky_slime"
+  ],
   "features" : [
     {
       "name": "fruit",
       "properties": {
-        "fruit_block": "dttconstruct:sky_slime_fruit"
-      }
-    }
-  ],
-  "drop_creators": [
-    "log",
-    "stick",
-    "seed",
-    {
-      "name": "fruit",
-      "properties":{
-        "fruit_item": "tconstruct:sky_slime_ball"
+        "fruit": "dttconstruct:sky_slime",
+        "fruiting_radius": 5
       }
     },
     {

@@ -1,10 +1,11 @@
 {
   "family": "dttconstruct:greenheart",
-  "tapering": 0.25,
+  "tapering": 0.4,
   "signal_energy": 8.0,
   "growth_rate": 1.1,
   "lowest_branch_height": 2,
   "leaves_properties": "dttconstruct:earth_slime",
+  "drop_seeds": true,
   "growth_logic_kit": {
     "name": "conifer",
     "properties": {
@@ -20,22 +21,15 @@
   },
   "primitive_sapling": "tconstruct:earth_slime_sapling",
   "acceptable_soils": [ "slime_like" ],
+  "fruits": [
+    "dttconstruct:green_slime"
+  ],
   "features" : [
     {
       "name": "fruit",
       "properties": {
-        "fruit_block": "dttconstruct:green_slime_fruit"
-      }
-    }
-  ],
-  "drop_creators": [
-    "log",
-    "stick",
-    "seed",
-    {
-      "name": "fruit",
-      "properties":{
-        "fruit_item": "slime_ball"
+        "fruit": "dttconstruct:ender_slime",
+        "fruiting_radius": 4
       }
     }
   ]

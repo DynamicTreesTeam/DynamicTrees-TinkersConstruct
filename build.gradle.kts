@@ -114,7 +114,7 @@ dependencies {
     // Compile TConstruct and DT, of course.
     // TConstruct needs Mantle
     implementation(fg.deobf("curse.maven:mantle-74924:3576386"))
-    implementation(fg.deobf("curse.maven:tinkers-construct-74072:3576393"))
+    implementation(fg.deobf("curse.maven:tinkers-construct-74072:3695126"))
     //implementation(files("libs/TConstruct-1.16.5-3.3.2-TestDT.DEV.bb16fbebc.jar"))
     implementation(fg.deobf("com.ferreusveritas.dynamictrees:DynamicTrees-$mcVersion:${property("dynamicTreesVersion")}"))
 
@@ -126,7 +126,7 @@ dependencies {
     runtimeOnly(fg.deobf("com.ferreusveritas.dynamictreesplus:DynamicTreesPlus-$mcVersion:${property("dynamicTreesPlusVersion")}"))
 
     // At runtime, use the full Hwyla mod.
-    runtimeOnly(fg.deobf("mcp.mobius.waila:Hwyla:${property("hwylaVersion")}"))
+    implementation(fg.deobf("curse.maven:hwyla-253449:3033593"))
 
     // At runtime, use the full JEI mod.
     runtimeOnly(fg.deobf("mezz.jei:jei-$mcVersion:${property("jeiVersion")}"))

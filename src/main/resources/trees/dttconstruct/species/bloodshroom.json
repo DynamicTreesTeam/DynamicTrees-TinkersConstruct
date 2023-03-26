@@ -17,6 +17,9 @@
   "acceptable_soils": [ "slime_like", "fungus_like", "dirt_like" ],
   "acceptable_growth_blocks": ["tconstruct:blood_vanilla_slime_grass", "tconstruct:blood_earth_slime_grass", "tconstruct:blood_sky_slime_grass", "tconstruct:blood_ender_slime_grass", "tconstruct:blood_ichor_slime_grass"],
   "sapling_shape": "round_mushroom",
+  "fruits": [
+    "dttconstruct:blood_slime"
+  ],
   "features" : [
     "clear_volume",
     {
@@ -29,15 +32,6 @@
       "name": "bottom_flare",
       "properties": {
         "min_radius": 7
-      }
-    }
-  ],
-  "drop_creators": [
-    "log",
-    {
-      "name": "wart_block",
-      "properties": {
-        "block": "tconstruct:blood_slime_leaves"
       }
     }
   ]
