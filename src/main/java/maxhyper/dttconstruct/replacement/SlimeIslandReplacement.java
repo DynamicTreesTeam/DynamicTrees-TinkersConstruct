@@ -1,179 +1,195 @@
 package maxhyper.dttconstruct.replacement;
 
-import com.google.common.collect.ImmutableList;
+import com.ferreusveritas.dynamictrees.DynamicTrees;
+import com.ferreusveritas.dynamictrees.init.DTConfigs;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+import maxhyper.dttconstruct.DTTConstructConfigs;
+import maxhyper.dttconstruct.DTTConstructRegistries;
 import maxhyper.dttconstruct.DynamicTreesTConstruct;
-import net.minecraft.entity.EntityType;
+import maxhyper.dttconstruct.replacement.structures.*;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.MobSpawnInfo;
-import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.DimensionSettings;
-import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructureStart;
-import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
+import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import slimeknights.tconstruct.common.TinkerModule;
 import slimeknights.tconstruct.common.config.Config;
-import slimeknights.tconstruct.world.TinkerStructures;
-import slimeknights.tconstruct.world.TinkerWorld;
-import slimeknights.tconstruct.world.worldgen.islands.AbstractIslandStructure;
-import slimeknights.tconstruct.world.worldgen.islands.SlimeIslandPiece;
-import slimeknights.tconstruct.world.worldgen.islands.variants.IIslandVariant;
-import slimeknights.tconstruct.world.worldgen.islands.variants.IslandVariants;
 
-import java.util.*;
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+@Mod.EventBusSubscriber(modid = DynamicTreesTConstruct.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SlimeIslandReplacement {
-//    private static boolean structureSettingsReady = false;
-//
-//    public static StructureFeature<NoFeatureConfig, ? extends Structure<NoFeatureConfig>> EARTH_SLIME_ISLAND;
-//    public static StructureFeature<NoFeatureConfig, ? extends Structure<NoFeatureConfig>> SKY_SLIME_ISLAND;
-//    public static StructureFeature<NoFeatureConfig, ? extends Structure<NoFeatureConfig>> CLAY_ISLAND;
-//    public static StructureFeature<NoFeatureConfig, ? extends Structure<NoFeatureConfig>> BLOOD_SLIME_ISLAND;
-//    public static StructureFeature<NoFeatureConfig, ? extends Structure<NoFeatureConfig>> END_SLIME_ISLAND;
-//
-//    private static final Structure<NoFeatureConfig> earthSlimeIsland = new DynamicAbstractIslandStructure(DynamicTreesTConstruct.resLoc("earth_slime_island")){
-//        private final List<MobSpawnInfo.Spawners> monsters = ImmutableList.of(new MobSpawnInfo.Spawners(TinkerWorld.earthSlimeEntity.get(), 30, 4, 4));;
-//        public List<MobSpawnInfo.Spawners> getDefaultSpawnList() {
-//            return this.monsters;
-//        }
-//        public IIslandVariant getVariant(Random random) { return random.nextBoolean() ? IslandVariants.EARTH_BLUE : IslandVariants.EARTH_GREEN; }
-//        protected int getHeight(ChunkGenerator generator, Rotation rotation, int x, int z, Random random) { return Math.max(generator.getSeaLevel() - 7, 0); }
-//    };
-//    private static final Structure<NoFeatureConfig> skySlimeIsland = new DynamicAbstractIslandStructure(DynamicTreesTConstruct.resLoc("sky_slime_island")){
-//        private final List<MobSpawnInfo.Spawners> monsters = ImmutableList.of(new MobSpawnInfo.Spawners(TinkerWorld.skySlimeEntity.get(), 30, 4, 4));
-//        public List<MobSpawnInfo.Spawners> getDefaultSpawnList() {
-//            return this.monsters;
-//        }
-//        public IIslandVariant getVariant(Random random) { return random.nextBoolean() ? IslandVariants.SKY_BLUE : IslandVariants.SKY_GREEN; }
-//    };
-//    private static final Structure<NoFeatureConfig> clayIsland = new DynamicAbstractIslandStructure(DynamicTreesTConstruct.resLoc("clay_island")){
-//        private final List<MobSpawnInfo.Spawners> monsters =ImmutableList.of(new MobSpawnInfo.Spawners(TinkerWorld.terracubeEntity.get(), 30, 4, 4));
-//        public List<MobSpawnInfo.Spawners> getDefaultSpawnList() {
-//            return this.monsters;
-//        }
-//        protected IIslandVariant getVariant(Random random) {
-//            return IslandVariants.SKY_CLAY;
-//        }
-//    };
-//    private static final Structure<NoFeatureConfig> bloodSlimeIsland = new DynamicAbstractIslandStructure(DynamicTreesTConstruct.resLoc("blood_slime_island")){
-//        private final List<MobSpawnInfo.Spawners> STRUCTURE_MONSTERS = ImmutableList.of(new MobSpawnInfo.Spawners(EntityType.MAGMA_CUBE, 150, 4, 6));
-//        public GenerationStage.Decoration step() {
-//            return GenerationStage.Decoration.UNDERGROUND_DECORATION;
-//        }
-//        public IIslandVariant getVariant(Random random) {
-//            return IslandVariants.BLOOD;
-//        }
-//        public List<MobSpawnInfo.Spawners> getDefaultSpawnList() {
-//            return STRUCTURE_MONSTERS;
-//        }
-//        protected int getHeight(ChunkGenerator generator, Rotation rotation, int x, int z, Random random) { return Math.max(generator.getSeaLevel() - 7, 0); }
-//    };
-//    private static final Structure<NoFeatureConfig> endSlimeIsland = new DynamicAbstractIslandStructure(DynamicTreesTConstruct.resLoc("end_slime_island")){
-//        private final List<MobSpawnInfo.Spawners> monsters = ImmutableList.of(new MobSpawnInfo.Spawners(TinkerWorld.enderSlimeEntity.get(), 30, 4, 4));
-//        public List<MobSpawnInfo.Spawners> getDefaultSpawnList() {
-//            return this.monsters;
-//        }
-//        public IIslandVariant getVariant(Random random) {
-//            return IslandVariants.ENDER;
-//        }
-//    };
-//
-//    private static void addStructureSettings(RegistryKey<DimensionSettings> key, Structure<?> structure, StructureSeparationSettings settings) {
-//        DimensionSettings dimensionSettings = WorldGenRegistries.NOISE_GENERATOR_SETTINGS.get(key);
-//        if (dimensionSettings != null) { dimensionSettings.structureSettings().structureConfig().put(structure, settings); }
-//    }
-//
-//    @SuppressWarnings({"unchecked", "UnstableApiUsage"})
-//    public static void addStructureSeparation() {
-//        if (structureSettingsReady) {
-//            StructureSeparationSettings earthSettings = new StructureSeparationSettings(Config.COMMON.earthSlimeIslandSeparation.get(), 5, 25988585);
-//            Map<Structure<?>, StructureSeparationSettings> defaultStructures = DimensionSettings.bootstrap().structureSettings().structureConfig();
-//            defaultStructures.put(earthSlimeIsland, earthSettings);
-//            addStructureSettings(DimensionSettings.AMPLIFIED, earthSlimeIsland, earthSettings);
-//            addStructureSettings(DimensionSettings.FLOATING_ISLANDS, earthSlimeIsland, earthSettings);
-//            StructureSeparationSettings skySettings = new StructureSeparationSettings(Config.COMMON.skySlimeIslandSeparation.get(), 5, 14357800);
-//            defaultStructures.put(skySlimeIsland, skySettings);
-//            addStructureSettings(DimensionSettings.AMPLIFIED, skySlimeIsland, skySettings);
-//            addStructureSettings(DimensionSettings.FLOATING_ISLANDS, skySlimeIsland, skySettings);
-//            StructureSeparationSettings claySettings = new StructureSeparationSettings(Config.COMMON.clayIslandSeparation.get(), 5, 162976988);
-//            defaultStructures.put(clayIsland, claySettings);
-//            addStructureSettings(DimensionSettings.AMPLIFIED, clayIsland, claySettings);
-//            addStructureSettings(DimensionSettings.FLOATING_ISLANDS, clayIsland, claySettings);
-//            StructureSeparationSettings netherSettings = new StructureSeparationSettings(Config.COMMON.bloodIslandSeparation.get(), 5, 65245622);
-//            addStructureSettings(DimensionSettings.NETHER, bloodSlimeIsland, netherSettings);
-//            StructureSeparationSettings endSettings = new StructureSeparationSettings(Config.COMMON.endSlimeIslandSeparation.get(), 5, 368963602);
-//            addStructureSettings(DimensionSettings.END, endSlimeIsland, endSettings);
-//            ImmutableMap.Builder<Structure<?>, StructureSeparationSettings> builder = ImmutableMap.builder();
-//            Set<Structure<?>> ignore = Sets.newHashSet(new Structure[]{earthSlimeIsland, skySlimeIsland, clayIsland, bloodSlimeIsland, endSlimeIsland});
-//            builder.putAll(DimensionStructuresSettings.DEFAULTS.entrySet().stream().filter((entry) -> !ignore.contains(entry.getKey())).collect(Collectors.toList()));
-//            builder.put(earthSlimeIsland, earthSettings);
-//            builder.put(skySlimeIsland, skySettings);
-//            builder.put(clayIsland, claySettings);
-//            builder.put(bloodSlimeIsland, netherSettings);
-//            builder.put(endSlimeIsland, endSettings);
-//            DimensionStructuresSettings.DEFAULTS = builder.build();
-//        }
-//    }
-//
-//    private static void addStructureToMap(Structure<?> structure) {
-//        Structure.STRUCTURES_REGISTRY.put((Objects.requireNonNull(structure.getRegistryName())).toString(), structure);
-//    }
 
-//    @SuppressWarnings({"unchecked", "rawtypes"})
-    public static void commonSetup (final FMLCommonSetupEvent event){
-//        event.enqueueWork(() -> {
-//            addStructureToMap(earthSlimeIsland);
-//            addStructureToMap(skySlimeIsland);
-//            addStructureToMap(clayIsland);
-//            addStructureToMap(bloodSlimeIsland);
-//            addStructureToMap(endSlimeIsland);
-//        });
-//        structureSettingsReady = true;
-//        event.enqueueWork(SlimeIslandReplacement::addStructureSeparation);
-//        event.enqueueWork(() -> {
-//            EARTH_SLIME_ISLAND =   (StructureFeature)WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, DynamicTreesTConstruct.resLoc("earth_slime_island"),    ((Structure) earthSlimeIsland).configured(NoFeatureConfig.INSTANCE));
-//            SKY_SLIME_ISLAND =     (StructureFeature)WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, DynamicTreesTConstruct.resLoc("sky_slime_island"),      ((Structure) skySlimeIsland).configured(NoFeatureConfig.INSTANCE));
-//            CLAY_ISLAND =          (StructureFeature)WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, DynamicTreesTConstruct.resLoc("clay_island"),           ((Structure) clayIsland).configured(NoFeatureConfig.INSTANCE));
-//            BLOOD_SLIME_ISLAND =   (StructureFeature)WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, DynamicTreesTConstruct.resLoc("blood_slime_island"),    ((Structure) bloodSlimeIsland).configured(NoFeatureConfig.INSTANCE));
-//            END_SLIME_ISLAND =     (StructureFeature)WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, DynamicTreesTConstruct.resLoc("end_slime_island"),      ((Structure) endSlimeIsland).configured(NoFeatureConfig.INSTANCE));
-//        });
-//        ((AbstractIslandStructure)TinkerStructures.earthSlimeIsland.get()).startFactory = DefaultStart::new;
+    public static RegistryObject<Structure<NoFeatureConfig>> earthSlimeIsland;
+    public static RegistryObject<Structure<NoFeatureConfig>> skySlimeIsland;
+    public static RegistryObject<Structure<NoFeatureConfig>> clayIsland;
+    public static RegistryObject<Structure<NoFeatureConfig>> bloodSlimeIsland;
+    public static RegistryObject<Structure<NoFeatureConfig>> endSlimeIsland;
+
+    static {
+        earthSlimeIsland = DTTConstructRegistries.STRUCTURE_FEATURES.register("earth_slime_island", EarthSlimeIslandStructureDynamic::new);
+        skySlimeIsland = DTTConstructRegistries.STRUCTURE_FEATURES.register("overworld_slime_island", SkySlimeIslandStructureDynamic::new);
+        clayIsland = DTTConstructRegistries.STRUCTURE_FEATURES.register("clay_island", ClayIslandStructureDynamic::new);
+        bloodSlimeIsland = DTTConstructRegistries.STRUCTURE_FEATURES.register("nether_slime_island", BloodSlimeIslandStructureDynamic::new);
+        endSlimeIsland = DTTConstructRegistries.STRUCTURE_FEATURES.register("end_slime_island", EnderSlimeIslandStructureDynamic::new);
     }
 
-//    public static class DefaultStart extends StructureStart<NoFeatureConfig> {
-//        public DefaultStart(Structure<NoFeatureConfig> structureIn, int chunkPosX, int chunkPosZ, MutableBoundingBox bounds, int references, long seed) {
-//            super(structureIn, chunkPosX, chunkPosZ, bounds, references, seed);
-//        }
-//
-//        public void generatePieces(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config) {
-////            // determine orientation
-////            Rotation rotation = Rotation.values()[this.random.nextInt(Rotation.values().length)];
-////            // determine coords
-////            int x = chunkX * 16 + 4 + this.random.nextInt(8);
-////            int z = chunkZ * 16 + 4 + this.random.nextInt(8);
-////            int y = getHeight(generator, rotation, x, z, this.random);
-////
-////            IIslandVariant variant = getVariant(random);
-////            // fetch the tree now so its consistent on the whole island
-////            SlimeIslandPiece slimeIslandPiece = new SlimeIslandPiece(templateManagerIn, variant, SIZES[this.random.nextInt(SIZES.length)], new BlockPos(x, y, z), variant.getTreeFeature(random), rotation);
-////            this.pieces.add(slimeIslandPiece);
-////            this.calculateBoundingBox();
-//            System.out.println(" ASAFASA : " + this);
-//        }
-//    }
+    public static StructureFeature<NoFeatureConfig, ? extends Structure<NoFeatureConfig>> EARTH_SLIME_ISLAND;
+    public static StructureFeature<NoFeatureConfig, ? extends Structure<NoFeatureConfig>> SKY_SLIME_ISLAND;
+    public static StructureFeature<NoFeatureConfig, ? extends Structure<NoFeatureConfig>> CLAY_ISLAND;
+    public static StructureFeature<NoFeatureConfig, ? extends Structure<NoFeatureConfig>> BLOOD_SLIME_ISLAND;
+    public static StructureFeature<NoFeatureConfig, ? extends Structure<NoFeatureConfig>> END_SLIME_ISLAND;
+
+    public static final SingleTreeFeature SINGLE_TREE_FEATURE = new SingleTreeFeature(SingleTreeFeatureConfig.CODEC);
+    public static final ConfiguredFeature<SingleTreeFeatureConfig, ?> SINGLE_TREE_BIOME_CONFIGURED_FEATURE = SINGLE_TREE_FEATURE.configured(new SingleTreeFeatureConfig(DynamicTrees.resLoc("oak"),true, new ResourceLocation("grass_block")));
+    public static final ConfiguredFeature<SingleTreeFeatureConfig, ?> SINGLE_TREE_GREENHEART_CONFIGURED_FEATURE = SINGLE_TREE_FEATURE.configured(new SingleTreeFeatureConfig(DynamicTreesTConstruct.resLoc("greenheart"), new ResourceLocation("tconstruct","earth_sky_slime_grass")));
+    public static final ConfiguredFeature<SingleTreeFeatureConfig, ?> SINGLE_TREE_SKYROOT_CONFIGURED_FEATURE = SINGLE_TREE_FEATURE.configured(new SingleTreeFeatureConfig(DynamicTreesTConstruct.resLoc("skyroot"), new ResourceLocation("tconstruct","sky_earth_slime_grass")));
+    public static final ConfiguredFeature<SingleTreeFeatureConfig, ?> SINGLE_TREE_ENDERSLIME_CONFIGURED_FEATURE = SINGLE_TREE_FEATURE.configured(new SingleTreeFeatureConfig(DynamicTreesTConstruct.resLoc("enderslime"), new ResourceLocation("tconstruct","ender_ender_slime_grass")));
+    public static final ConfiguredFeature<SingleTreeFeatureConfig, ?> SINGLE_TREE_BLOODSHROOM_CONFIGURED_FEATURE = SINGLE_TREE_FEATURE.configured(new SingleTreeFeatureConfig(DynamicTreesTConstruct.resLoc("bloodshroom"), new ResourceLocation("tconstruct","blood_ichor_slime_grass")));
+
+    public static void commonSetup (final FMLCommonSetupEvent event){
+        Config.COMMON.generateEarthSlimeIslands.set(false);
+        Config.COMMON.generateSkySlimeIslands.set(false);
+        Config.COMMON.generateClayIslands.set(false);
+        Config.COMMON.generateBloodIslands.set(false);
+        Config.COMMON.generateEndSlimeIslands.set(false);
+
+        event.enqueueWork(() -> {
+            addStructureToMap(earthSlimeIsland.get());
+            addStructureToMap(skySlimeIsland.get());
+            addStructureToMap(clayIsland.get());
+            addStructureToMap(bloodSlimeIsland.get());
+            addStructureToMap(endSlimeIsland.get());
+        });
+        event.enqueueWork(SlimeIslandReplacement::addStructureSeparation);
+        event.enqueueWork(() -> {
+            EARTH_SLIME_ISLAND = WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, DynamicTreesTConstruct.resLoc("earth_slime_island"), (earthSlimeIsland.get()).configured(NoFeatureConfig.INSTANCE));
+            SKY_SLIME_ISLAND = WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, DynamicTreesTConstruct.resLoc("sky_slime_island"), (skySlimeIsland.get()).configured(NoFeatureConfig.INSTANCE));
+            CLAY_ISLAND = WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, DynamicTreesTConstruct.resLoc("clay_island"), (clayIsland.get()).configured(NoFeatureConfig.INSTANCE));
+            BLOOD_SLIME_ISLAND = WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, DynamicTreesTConstruct.resLoc("blood_slime_island"), (bloodSlimeIsland.get()).configured(NoFeatureConfig.INSTANCE));
+            END_SLIME_ISLAND = WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, DynamicTreesTConstruct.resLoc("end_slime_island"), (endSlimeIsland.get()).configured(NoFeatureConfig.INSTANCE));
+
+            Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, DynamicTreesTConstruct.resLoc("clay_island_tree"), SINGLE_TREE_BIOME_CONFIGURED_FEATURE);
+
+            Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, DynamicTreesTConstruct.resLoc("slime_island_greenheart_tree"), SINGLE_TREE_GREENHEART_CONFIGURED_FEATURE);
+            Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, DynamicTreesTConstruct.resLoc("slime_island_skyroot_tree"), SINGLE_TREE_SKYROOT_CONFIGURED_FEATURE);
+            Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, DynamicTreesTConstruct.resLoc("slime_island_enderslime_tree"), SINGLE_TREE_ENDERSLIME_CONFIGURED_FEATURE);
+            Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, DynamicTreesTConstruct.resLoc("slime_island_bloodshroom_tree"), SINGLE_TREE_BLOODSHROOM_CONFIGURED_FEATURE);
+        });
+
+    }
+
+    @SubscribeEvent
+    public static void onFeatureRegistry(final RegistryEvent.Register<Feature<?>> event) {
+        event.getRegistry().register(SINGLE_TREE_FEATURE);
+    }
+
+
+    @SubscribeEvent
+    static void onBiomeLoad(BiomeLoadingEvent event) {
+        if (!DTConfigs.WORLD_GEN.get()) return;
+
+        BiomeGenerationSettingsBuilder generation = event.getGeneration();
+        Biome.Category category = event.getCategory();
+
+        if (category == Biome.Category.NETHER) {
+            if (DTTConstructConfigs.GENERATE_BLOOD_ISLANDS.get()) {
+                generation.addStructureStart(BLOOD_SLIME_ISLAND);
+            }
+        } else if (category != Biome.Category.THEEND) {
+
+            if (DTTConstructConfigs.GENERATE_SKY_SLIME_ISLANDS.get()) {
+                generation.addStructureStart(SKY_SLIME_ISLAND);
+            }
+
+            if (DTTConstructConfigs.GENERATE_CLAY_ISLANDS.get() && category != Biome.Category.TAIGA && category != Biome.Category.JUNGLE && category != Biome.Category.FOREST && category != Biome.Category.OCEAN && category != Biome.Category.SWAMP) {
+                generation.addStructureStart(CLAY_ISLAND);
+            }
+
+            if (DTTConstructConfigs.GENERATE_EARTH_SLIME_ISLANDS.get() && category == Biome.Category.OCEAN) {
+                generation.addStructureStart(EARTH_SLIME_ISLAND);
+            }
+
+        } else if (!doesNameMatchBiomes(event.getName(), Biomes.THE_END, Biomes.THE_VOID)) {
+
+            if (DTTConstructConfigs.GENERATE_END_SLIME_ISLANDS.get()) {
+                generation.addStructureStart(END_SLIME_ISLAND);
+            }
+        }
+
+    }
+
+    private static boolean doesNameMatchBiomes(@Nullable ResourceLocation name, RegistryKey<?>... biomes) {
+        int biomeCount = biomes.length;
+
+        for(int i = 0; i < biomeCount; ++i) {
+            RegistryKey<?> biome = ((RegistryKey<?>[]) biomes)[i];
+            if (biome.location().equals(name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static void addStructureSettings(RegistryKey<DimensionSettings> key, Structure<?> structure, StructureSeparationSettings settings) {
+        DimensionSettings dimensionSettings = WorldGenRegistries.NOISE_GENERATOR_SETTINGS.get(key);
+        if (dimensionSettings != null) {
+            dimensionSettings.structureSettings().structureConfig().put(structure, settings);
+        }
+    }
+    private static void addStructureToMap(Structure<?> structure) {
+        Structure.STRUCTURES_REGISTRY.put((Objects.requireNonNull(structure.getRegistryName())).toString(), structure);
+    }
+    public static void addStructureSeparation() {
+
+        StructureSeparationSettings earthSettings = new StructureSeparationSettings(Config.COMMON.earthSlimeIslandSeparation.get(), 5, 25988585);
+        Map<Structure<?>, StructureSeparationSettings> defaultStructures = DimensionSettings.bootstrap().structureSettings().structureConfig();
+        defaultStructures.put(earthSlimeIsland.get(), earthSettings);
+        addStructureSettings(DimensionSettings.AMPLIFIED, earthSlimeIsland.get(), earthSettings);
+        addStructureSettings(DimensionSettings.FLOATING_ISLANDS, earthSlimeIsland.get(), earthSettings);
+        StructureSeparationSettings skySettings = new StructureSeparationSettings(Config.COMMON.skySlimeIslandSeparation.get(), 5, 14357800);
+        defaultStructures.put(skySlimeIsland.get(), skySettings);
+        addStructureSettings(DimensionSettings.AMPLIFIED, skySlimeIsland.get(), skySettings);
+        addStructureSettings(DimensionSettings.FLOATING_ISLANDS, skySlimeIsland.get(), skySettings);
+        StructureSeparationSettings claySettings = new StructureSeparationSettings(Config.COMMON.clayIslandSeparation.get(), 5, 162976988);
+        defaultStructures.put(clayIsland.get(), claySettings);
+        addStructureSettings(DimensionSettings.AMPLIFIED, clayIsland.get(), claySettings);
+        addStructureSettings(DimensionSettings.FLOATING_ISLANDS, clayIsland.get(), claySettings);
+        StructureSeparationSettings netherSettings = new StructureSeparationSettings(Config.COMMON.bloodIslandSeparation.get(), 5, 65245622);
+        addStructureSettings(DimensionSettings.NETHER, bloodSlimeIsland.get(), netherSettings);
+        StructureSeparationSettings endSettings = new StructureSeparationSettings(Config.COMMON.endSlimeIslandSeparation.get(), 5, 368963602);
+        addStructureSettings(DimensionSettings.END, endSlimeIsland.get(), endSettings);
+        ImmutableMap.Builder<Structure<?>, StructureSeparationSettings> builder = ImmutableMap.builder();
+        Set<Structure<?>> ignore = Sets.newHashSet(new Structure[]{earthSlimeIsland.get(), skySlimeIsland.get(), clayIsland.get(), bloodSlimeIsland.get(), endSlimeIsland.get()});
+        builder.putAll(DimensionStructuresSettings.DEFAULTS.entrySet().stream().filter((entry) -> !ignore.contains(entry.getKey())).collect(Collectors.toList()));
+        builder.put(earthSlimeIsland.get(), earthSettings);
+        builder.put(skySlimeIsland.get(), skySettings);
+        builder.put(clayIsland.get(), claySettings);
+        builder.put(bloodSlimeIsland.get(), netherSettings);
+        builder.put(endSlimeIsland.get(), endSettings);
+        DimensionStructuresSettings.DEFAULTS = builder.build();
+
+    }
 
 }

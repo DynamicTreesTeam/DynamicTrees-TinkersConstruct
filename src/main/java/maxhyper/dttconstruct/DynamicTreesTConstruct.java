@@ -5,7 +5,6 @@ import com.ferreusveritas.dynamictrees.api.registry.RegistryHandler;
 import com.ferreusveritas.dynamictrees.blocks.leaves.LeavesProperties;
 import com.ferreusveritas.dynamictrees.blocks.rootyblocks.SoilProperties;
 import com.ferreusveritas.dynamictrees.init.DTConfigs;
-import com.ferreusveritas.dynamictrees.resources.Resources;
 import com.ferreusveritas.dynamictrees.trees.Family;
 import com.ferreusveritas.dynamictrees.trees.Species;
 import maxhyper.dttconstruct.replacement.SlimeIslandReplacement;
@@ -17,7 +16,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import slimeknights.tconstruct.common.config.Config;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(DynamicTreesTConstruct.MOD_ID)
@@ -40,18 +38,14 @@ public class DynamicTreesTConstruct
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        Config.COMMON.generateEarthSlimeIslands.set(false);
-        Config.COMMON.generateSkySlimeIslands.set(false);
-        Config.COMMON.generateClayIslands.set(false);
-        Config.COMMON.generateBloodIslands.set(false);
-        Config.COMMON.generateEndSlimeIslands.set(false);
-
         if (DTConfigs.WORLD_GEN.get()){
             SlimeIslandReplacement.commonSetup(event);
         }
         //        if (DTConfigs.REPLACE_NYLIUM_FUNGI.get()) {
 //            replaceNyliumFungiFeatures();
 //        }
+
+        event.enqueueWork(DTTConstructRegistries::setupConnectables);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
@@ -72,15 +66,14 @@ public class DynamicTreesTConstruct
 //    }
 
     private void gatherData(final GatherDataEvent event) {
-        GatherDataHelper.gatherLootData(MOD_ID, event);
-//        GatherDataHelper.gatherAllData(
-//                MOD_ID,
-//                event,
-//                //SoilProperties.REGISTRY,
-//                Family.REGISTRY,
-//                Species.REGISTRY,
-//                LeavesProperties.REGISTRY
-//        );
+        GatherDataHelper.gatherAllData(
+                MOD_ID,
+                event,
+                SoilProperties.REGISTRY,
+                Family.REGISTRY,
+                Species.REGISTRY,
+                LeavesProperties.REGISTRY
+        );
     }
 
     public static ResourceLocation resLoc(final String path) {

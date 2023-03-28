@@ -39,7 +39,7 @@
       "name": "vines",
       "properties": {
         "block": "tconstruct:ender_slime_vine",
-        "quantity": 16,
+        "quantity": 32,
         "max_length": 4
       }
     }
