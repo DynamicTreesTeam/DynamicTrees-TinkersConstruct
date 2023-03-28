@@ -58,7 +58,7 @@ public class SingleTreeFeature extends Feature<SingleTreeFeatureConfig> {
             return distA.compareTo(distB);
         });
 
-        //if the ground is air two blocks down it means the circle is outside of the island
+        //if the ground is air two blocks down it means the circle is outside the island
         BlockPos rootPos = new BlockPos(closest.x, pos.below().getY(), closest.z);
         if (!world.getBlockState(rootPos.above()).getMaterial().isReplaceable()) rootPos = rootPos.above();
         else {
@@ -70,7 +70,7 @@ public class SingleTreeFeature extends Feature<SingleTreeFeatureConfig> {
         }
 
         BlockState rootState = world.getBlockState(rootPos);
-        //if the state is a tree part that means theres already a tree!
+        //if the state is a tree part that means there's already a tree!
         if (TreeHelper.getTreePart(rootState) != TreeHelper.NULL_TREE_PART) return false;
 
         //This is the default soil block of the island, used to replace and test generation
@@ -87,9 +87,9 @@ public class SingleTreeFeature extends Feature<SingleTreeFeatureConfig> {
             BiomeDatabase biomeDatabase = BiomeDatabases.getDimensionalOrDefault(world.getLevel().dimension().location());
             species = biomeDatabase.getEntry(biome).getSpeciesSelector().getSpecies(rootPos, BlockStates.GRASS, rand).getSpecies();
             if (!species.isAcceptableSoil(deafaultSoilState)) species = Species.REGISTRY.get(config.species);
-        } else {
+        } else
             species = Species.REGISTRY.get(config.species);
-        }
+
 
         if (!species.isValid()) return false;
 
@@ -101,14 +101,19 @@ public class SingleTreeFeature extends Feature<SingleTreeFeatureConfig> {
 
         //this is a debug only issue where one point will place a gold block and another will generate on it
         if (DTConfigs.WORLD_GEN_DEBUG.get() && (rootBlock == Blocks.GOLD_BLOCK || rootBlock == Blocks.LAPIS_BLOCK)){
-            world.setBlock(rootPos, Blocks.DIAMOND_BLOCK.defaultBlockState(), 0);
             return false;
         }
 
         JoCode joCode = species.getRandomJoCode(radius, rand).orElse(null);
         if (joCode == null) return false;
 
-        joCode.generate(worldContext, species, rootPos, biome, Direction.Plane.HORIZONTAL.getRandomDirection(rand), radius, SafeChunkBounds.ANY_WG, false);
+        //Finally, if the soil is valid generate the tree
+        if (species.isAcceptableSoilForWorldgen(world, rootPos, world.getBlockState(rootPos)))
+            joCode.generate(worldContext, species, rootPos, biome, Direction.Plane.HORIZONTAL.getRandomDirection(rand), radius, SafeChunkBounds.ANY_WG, false);
+        else {
+            world.setBlock(rootPos, Blocks.DIAMOND_BLOCK.defaultBlockState(), 0);
+            return false;
+        }
 
         //if the root block is not a tree part that means the tree generation failed
         if (TreeHelper.getTreePart(world.getBlockState(rootPos)) == TreeHelper.NULL_TREE_PART) {
