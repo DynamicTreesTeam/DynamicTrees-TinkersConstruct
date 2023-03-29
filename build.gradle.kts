@@ -161,16 +161,8 @@ java {
     }
 }
 
-fun readChangelog(): String? {
-    val versionInfoFile = file("version_info.json")
-    val jsonObject = Gson().fromJson(InputStreamReader(versionInfoFile.inputStream()), JsonObject::class.java)
-    return jsonObject
-        .get(mcVersion)?.asJsonObject
-        ?.get(project.version.toString())?.asString
-}
-
 fun enablePublishing() =
-    project.hasProperty("curseApiKey") && project.hasProperty("curseFileType") && project.hasProperty("projectId")
+    project.hasProperty("curseApiKey") && project.hasProperty("curseFileType")
 
 tasks.withType(CurseUploadTask::class.java) {
     onlyIf {
@@ -188,12 +180,11 @@ curseforge {
     apiKey = property("curseApiKey")
 
     project {
-        id = property("projectId")
+        id = "386747"
 
-        addGameVersion("1.16.4")
         addGameVersion(mcVersion)
 
-        changelog = readChangelog() ?: "No changelog provided."
+        changelog = "Changelog will be added shortly..."
         changelogType = "markdown"
         releaseType = property("curseFileType")
 
@@ -202,8 +193,7 @@ curseforge {
         mainArtifact(tasks.findByName("jar")) {
             relations {
                 requiredDependency("dynamictrees")
-                requiredDependency("oh-the-biomes-youll-go")
-                optionalDependency("dynamictreesplus")
+                requiredDependency("tinkers-construct")
             }
         }
     }

@@ -35,7 +35,7 @@ import java.util.Random;
 
 public class SingleTreeFeature extends Feature<SingleTreeFeatureConfig> {
 
-    static final ITag<Block> congealed_slime_tag = BlockTags.getAllTags().getTagOrEmpty(new ResourceLocation("tconstruct","congealed_slime"));
+    protected static ITag<Block> congealed_slime_tag;
 
     public SingleTreeFeature(Codec<SingleTreeFeatureConfig> codec) {
         super(codec);
@@ -44,6 +44,8 @@ public class SingleTreeFeature extends Feature<SingleTreeFeatureConfig> {
 
     @Override
     public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, SingleTreeFeatureConfig config) {
+        if (congealed_slime_tag == null) congealed_slime_tag = BlockTags.getAllTags().getTagOrEmpty(new ResourceLocation("tconstruct","congealed_slime"));
+
         final ChunkPos chunkPos = world.getChunk(pos).getPos();
         WorldContext worldContext = new WorldContext(world.getLevel().dimension(), world.getSeed(), world, world.getLevel());
 
@@ -51,15 +53,25 @@ public class SingleTreeFeature extends Feature<SingleTreeFeatureConfig> {
 
         //we find the closest valid poisson disc to place the tree there
         List<PoissonDisc> discs = TreeGenerator.getTreeGenerator().getCircleProvider().getPoissonDiscs(worldContext, chunkPos);
-        PoissonDisc closest = Collections.min(discs, (a,b)->{
-            int posY = pos.getY();
-            Double distA = pos.distSqr(new Vector3i(a.x,posY,a.z));
-            Double distB = pos.distSqr(new Vector3i(b.x,posY,b.z));
-            return distA.compareTo(distB);
-        });
 
-        //if the ground is air two blocks down it means the circle is outside the island
-        BlockPos rootPos = new BlockPos(closest.x, pos.below().getY(), closest.z);
+        BlockPos rootPos;
+        int radius;
+        if (discs.size() > 0) {
+            PoissonDisc closest = Collections.min(discs, (a,b)->{
+                int posY = pos.getY();
+                Double distA = pos.distSqr(a.x,posY,a.z, false);
+                Double distB = pos.distSqr(b.x,posY,b.z, false);
+                return distA.compareTo(distB);
+            });
+            //if the ground is air two blocks down it means the circle is outside the island
+            rootPos = new BlockPos(closest.x, pos.below().getY(), closest.z);
+            radius = closest.radius;
+        } else {
+            //if there arent any valid discs, fuck it just generate where it stands with a random radius
+            rootPos = pos;
+            radius = rand.nextInt(7) + 2;
+        }
+
         if (!world.getBlockState(rootPos.above()).getMaterial().isReplaceable()) rootPos = rootPos.above();
         else {
             if (world.getBlockState(rootPos).getMaterial().isReplaceable()) rootPos = rootPos.below();
@@ -79,7 +91,6 @@ public class SingleTreeFeature extends Feature<SingleTreeFeatureConfig> {
         BlockState deafaultSoilState = defaultSoilBlock.defaultBlockState();
 
         Biome biome = world.getBiome(rootPos);
-        int radius = closest.radius;
 
         //get the species either from the biome database or from the config
         Species species;

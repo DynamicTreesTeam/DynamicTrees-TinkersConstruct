@@ -67,7 +67,7 @@ Compatibility Mod between Dynamic trees and Tinkers' Construct
 [[dependencies.dttconstruct]]
     modId="dynamictrees"
     mandatory=true
-    versionRange="[0.10.0,)"
+    versionRange="[0.10.5,)"
     ordering="AFTER"
     side="BOTH"
 
@@ -81,6 +81,6 @@ Compatibility Mod between Dynamic trees and Tinkers' Construct
 [[dependencies.dttconstruct]]
     modId="tconstruct"
     mandatory=true
-    versionRange="[3.0.3,)"
+    versionRange="[3.3.4,3.4)"
     ordering="AFTER"
     side="BOTH"

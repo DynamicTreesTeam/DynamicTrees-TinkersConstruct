@@ -104,7 +104,6 @@ public class SlimeIslandReplacement {
         event.getRegistry().register(SINGLE_TREE_FEATURE);
     }
 
-
     @SubscribeEvent
     static void onBiomeLoad(BiomeLoadingEvent event) {
         if (!DTConfigs.WORLD_GEN.get()) return;
