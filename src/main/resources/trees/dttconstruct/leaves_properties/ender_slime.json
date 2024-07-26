@@ -1,7 +1,14 @@
 {
+  "type": "scruffy",
   "primitive_leaves": "tconstruct:ender_slime_leaves",
-  "cell_kit": "dynamictrees:conifer",
   "fire_spread": 0,
   "flammability": 0,
-  "light_requirement": 0
+  "light_requirement": 0,
+  "smother": 6,
+  "texture_overrides" : {
+    "leaves": "tconstruct:block/slime/foliage/leaves"
+  },
+  "model_overrides": {
+    "leaves": "tconstruct:block/slime/leaves"
+  }
 }

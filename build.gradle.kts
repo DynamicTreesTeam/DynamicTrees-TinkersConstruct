@@ -1,11 +1,15 @@
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.matthewprenger.cursegradle.*
-import java.io.InputStreamReader
+import com.matthewprenger.cursegradle.CurseArtifact
+import com.matthewprenger.cursegradle.CurseExtension
+import com.matthewprenger.cursegradle.CurseProject
+import com.matthewprenger.cursegradle.CurseRelation
+import net.minecraftforge.gradle.common.util.RunConfig
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 
 fun property(key: String) = project.findProperty(key).toString()
+fun optionalProperty(key: String) = project.findProperty(key)?.toString()
+
+apply(from = "https://gist.githubusercontent.com/Harleyoc1/4d23d4e991e868d98d548ac55832381e/raw/applesiliconfg.gradle")
 
 plugins {
     id("java")
@@ -14,11 +18,12 @@ plugins {
     id("idea")
     id("maven-publish")
     id("com.matthewprenger.cursegradle") version "1.4.0"
+    id("com.modrinth.minotaur") version "2.+"
+    id("com.harleyoconnor.autoupdatetool") version "1.0.7"
 }
 
 repositories {
     maven("https://ldtteam.jfrog.io/ldtteam/modding/")
-    maven("https://maven.tehnut.info")
     maven("https://www.cursemaven.com") {
         content {
             includeGroup("curse.maven")
@@ -26,29 +31,24 @@ repositories {
     }
     maven("https://harleyoconnor.com/maven")
     maven("https://squiddev.cc/maven/")
+    mavenLocal()
 }
 
 val modName = property("modName")
 val modId = property("modId")
 val modVersion = property("modVersion")
 val mcVersion = property("mcVersion")
+val dtVersion = property("dynamicTreesVersion")
 
 version = "$mcVersion-$modVersion"
 group = property("group")
 
 minecraft {
-    mappings("official", mcVersion)
-    accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
+    mappings("parchment", "${property("mappingsVersion")}-$mcVersion")
 
     runs {
         create("client") {
-            workingDirectory = file("run").absolutePath
-
-            property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
-            property("forge.logging.console.level", "debug")
-
-            property("mixin.env.remapRefMap", "true")
-            property("mixin.env.refMapRemappingFile", "${buildDir}/createSrgToMcp/output.srg")
+            applyDefaultConfiguration()
 
             if (project.hasProperty("mcUuid")) {
                 args("--uuid", property("mcUuid"))
@@ -59,46 +59,23 @@ minecraft {
             if (project.hasProperty("mcAccessToken")) {
                 args("--accessToken", property("mcAccessToken"))
             }
-
-            mods {
-                create(modId) {
-                    source(sourceSets.main.get())
-                }
-            }
         }
 
         create("server") {
-            workingDirectory = file("run").absolutePath
-
-            property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
-            property("forge.logging.console.level", "debug")
-
-            property("mixin.env.remapRefMap", "true")
-            property("mixin.env.refMapRemappingFile", "${buildDir}/createSrgToMcp/output.srg")
-
-            mods {
-                create(modId) {
-                    source(sourceSets.main.get())
-                }
-            }
+            applyDefaultConfiguration("run-server")
         }
 
         create("data") {
-            workingDirectory = file("run").absolutePath
+            applyDefaultConfiguration()
 
-            property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
-            property("forge.logging.console.level", "debug")
-
-            property("mixin.env.remapRefMap", "true")
-            property("mixin.env.refMapRemappingFile", "${buildDir}/createSrgToMcp/output.srg")
-
-            args("--mod", modId, "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources"))
-
-            mods {
-                create(modId) {
-                    source(sourceSets.main.get())
-                }
-            }
+            args(
+                "--mod", modId,
+                "--all",
+                "--output", file("src/generated/resources/"),
+                "--existing", file("src/main/resources"),
+                "--existing-mod", "dynamictrees",
+                "--existing-mod", "tconstruct"
+            )
         }
     }
 }
@@ -108,34 +85,19 @@ sourceSets.main.get().resources {
 }
 
 dependencies {
-    // Not sure if we need this one, what is a "forge" anyway?
     minecraft("net.minecraftforge:forge:$mcVersion-${property("forgeVersion")}")
 
-    // Compile TConstruct and DT, of course.
-    // TConstruct needs Mantle
-    implementation(fg.deobf("curse.maven:mantle-74924:3576386"))
-    implementation(fg.deobf("curse.maven:tinkers-construct-74072:3695126"))
-    //implementation(files("libs/TConstruct-1.16.5-3.3.2-TestDT.DEV.bb16fbebc.jar"))
-    implementation(fg.deobf("com.ferreusveritas.dynamictrees:DynamicTrees-$mcVersion:${property("dynamicTreesVersion")}"))
+    implementation(fg.deobf("com.ferreusveritas.dynamictrees:DynamicTrees-$mcVersion:$dtVersion"))
+    implementation(fg.deobf("com.ferreusveritas.dynamictreesplus:DynamicTreesPlus-$mcVersion:${property("dynamicTreesPlusVersion")}"))
 
-    /////////////////////////////////////////
-    /// Runtime Dependencies (optional)
-    /////////////////////////////////////////
+    implementation(fg.deobf("curse.maven:mantle-74924:5339977"))
+    implementation(fg.deobf("curse.maven:tinkers-construct-74072:5358052"))
 
-    // At runtime, use DT+ for BYG's cacti.
-    runtimeOnly(fg.deobf("com.ferreusveritas.dynamictreesplus:DynamicTreesPlus-$mcVersion:${property("dynamicTreesPlusVersion")}"))
-
-    // At runtime, use the full Hwyla mod.
-    implementation(fg.deobf("curse.maven:hwyla-253449:3033593"))
-
-    // At runtime, use the full JEI mod.
-    runtimeOnly(fg.deobf("mezz.jei:jei-$mcVersion:${property("jeiVersion")}"))
-
-    // At runtime, use CC for creating growth chambers.
+    runtimeOnly(fg.deobf("curse.maven:jade-324717:4433884"))
+    runtimeOnly(fg.deobf("curse.maven:jei-238222:4615177"))
     runtimeOnly(fg.deobf("org.squiddev:cc-tweaked-$mcVersion:${property("ccVersion")}"))
-
-    // At runtime, use suggestion provider fix mod.
-    runtimeOnly(fg.deobf("com.harleyoconnor.suggestionproviderfix:SuggestionProviderFix:$mcVersion-${property("suggestionProviderFixVersion")}"))
+    runtimeOnly(fg.deobf("com.harleyoconnor.suggestionproviderfix:SuggestionProviderFix-1.19:${property("suggestionProviderFixVersion")}"))
+    runtimeOnly(fg.deobf("vazkii.patchouli:Patchouli:${property("patchouliVersion")}"))
 }
 
 tasks.jar {
@@ -157,23 +119,15 @@ java {
     withSourcesJar()
 
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
-fun enablePublishing() =
-    project.hasProperty("curseApiKey") && project.hasProperty("curseFileType")
-
-tasks.withType(CurseUploadTask::class.java) {
-    onlyIf {
-        enablePublishing()
-    }
-}
+val changelogFile = file("build/changelog.txt")
 
 curseforge {
-    if (!enablePublishing()) {
-        project.logger.log(LogLevel.WARN, "API Key, file type, or project ID for CurseForge not detected; uploading " +
-                "will be disabled.")
+    if (!project.hasProperty("curseApiKey")) {
+        project.logger.warn("API Key for CurseForge not detected; uploading will be disabled.")
         return@curseforge
     }
 
@@ -184,9 +138,9 @@ curseforge {
 
         addGameVersion(mcVersion)
 
-        changelog = "Changelog will be added shortly..."
+        changelog = changelogFile
         changelogType = "markdown"
-        releaseType = property("curseFileType")
+        releaseType = optionalProperty("versionType") ?: "release"
 
         addArtifact(tasks.findByName("sourcesJar"))
 
@@ -206,59 +160,43 @@ tasks.withType<GenerateModuleMetadata> {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            artifactId = "$modName-$mcVersion"
-            version = modVersion
-
             from(components["java"])
-
-            pom {
-                name.set(modName)
-                url.set("https://github.com/supermassimo/$modName")
-                licenses {
-                    license {
-                        name.set("MIT")
-                        url.set("https://mit-license.org")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git://github.com/supermassimo/$modName.git")
-                    developerConnection.set("scm:git:ssh://github.com/supermassimo/$modName.git")
-                    url.set("https://github.com/supermassimo/$modName")
-                }
-            }
-
-            pom.withXml {
-                val element = asElement()
-
-                // Clear dependencies.
-                for (i in 0 until element.childNodes.length) {
-                    val node = element.childNodes.item(i)
-                    if (node?.nodeName == "dependencies") {
-                        element.removeChild(node)
-                    }
-                }
-            }
         }
     }
     repositories {
         maven("file:///${project.projectDir}/mcmodsrepo")
-        if (hasProperty("harleyOConnorMavenUsername") && hasProperty("harleyOConnorMavenPassword")) {
-            maven("https://harleyoconnor.com/maven") {
-                name = "HarleyOConnor"
-                credentials {
-                    username = property("harleyOConnorMavenUsername")
-                    password = property("harleyOConnorMavenPassword")
-                }
-            }
-        } else {
-            logger.log(LogLevel.WARN, "Credentials for maven not detected; it will be disabled.")
+    }
+}
+
+autoUpdateTool {
+    minecraftVersion.set(mcVersion)
+    version.set(modVersion)
+    versionRecommended.set(property("versionRecommended") == "true")
+    changelogOutputFile.set(changelogFile)
+    updateCheckerFile.set(file(property("dynamictrees.version_info_repo.path") + File.separatorChar + property("updateCheckerPath")))
+}
+
+tasks.autoUpdate {
+    finalizedBy("curseforge")
+}
+
+fun RunConfig.applyDefaultConfiguration(runDirectory: String = "run") {
+    workingDirectory = file(runDirectory).absolutePath
+
+    property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
+    property("forge.logging.console.level", "debug")
+
+    property("mixin.env.remapRefMap", "true")
+    property("mixin.env.refMapRemappingFile", "${buildDir}/createSrgToMcp/output.srg")
+
+    mods {
+        create(modId) {
+            source(sourceSets.main.get())
         }
     }
 }
 
-// Extensions to make CurseGradle extension slightly neater.
-
-fun com.matthewprenger.cursegradle.CurseExtension.project(action: CurseProject.() -> Unit) {
+fun CurseExtension.project(action: CurseProject.() -> Unit) {
     this.project(closureOf(action))
 }
 

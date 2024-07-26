@@ -1,0 +1,37 @@
+{
+  "family": "dttconstruct:enderbark",
+  "tapering": 0.2,
+  "signal_energy": 10.0,
+  "growth_rate": 0.9,
+  "lowest_branch_height": 4,
+  "leaves_properties": "dttconstruct:ender_slime",
+  "drop_seeds": true,
+  "environment_factors" : {
+    "hot": 0.8,
+    "dry": 0.3,
+    "end": 1.2,
+    "nether": 0.5
+  },
+  "primitive_sapling": "tconstruct:ender_slime_sapling",
+  "acceptable_soils": [ "slime_like" ],
+  "fruits": [
+    "dttconstruct:ender_slime"
+  ],
+  "features" : [
+    {
+      "name": "fruit",
+      "properties": {
+        "fruit": "dttconstruct:ender_slime",
+        "fruiting_radius": 5
+      }
+    },
+    {
+      "name": "vines",
+      "properties": {
+        "block": "tconstruct:ender_slime_vine",
+        "quantity": 32,
+        "max_length": 4
+      }
+    }
+  ]
+}

@@ -3,5 +3,14 @@
   "common_species": "dttconstruct:greenheart",
   "primitive_log": "tconstruct:greenheart_log",
   "primitive_stripped_log": "tconstruct:stripped_greenheart_log",
-  "max_branch_radius": 8
+  "max_branch_radius": 8,
+  "branch_properties": {
+    "sound": "SLIME_BLOCK"
+  },
+  "texture_overrides" : {
+    "branch": "tconstruct:block/wood/greenheart/log",
+    "branch_top": "tconstruct:block/wood/greenheart/log_top",
+    "stripped_branch": "tconstruct:block/wood/greenheart/stripped_log",
+    "stripped_branch_top": "tconstruct:block/wood/greenheart/stripped_log_top"
+  }
 }

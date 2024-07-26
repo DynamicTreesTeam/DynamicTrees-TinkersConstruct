@@ -3,5 +3,14 @@
   "common_species": "dttconstruct:skyroot",
   "primitive_log": "tconstruct:skyroot_log",
   "primitive_stripped_log": "tconstruct:stripped_skyroot_log",
-  "max_branch_radius": 8
+  "max_branch_radius": 8,
+  "branch_properties": {
+    "sound": "SLIME_BLOCK"
+  },
+  "texture_overrides" : {
+    "branch": "tconstruct:block/wood/skyroot/log",
+    "branch_top": "tconstruct:block/wood/skyroot/log_top",
+    "stripped_branch": "tconstruct:block/wood/skyroot/stripped_log",
+    "stripped_branch_top": "tconstruct:block/wood/skyroot/stripped_log_top"
+  }
 }

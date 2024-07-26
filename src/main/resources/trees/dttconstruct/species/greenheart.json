@@ -10,8 +10,9 @@
     "name": "conifer",
     "properties": {
       "energy_divisor": 1.5,
-      "height_variation": 5,
-      "horizontal_limiter": 16
+      "height_variation": 3,
+      "horizontal_limiter": 16,
+      "variate_lowest_branch": true
     }
   },
   "environment_factors" : {

@@ -6,5 +6,11 @@
   "light_requirement": 0,
   "fire_spread": 0,
   "flammability": 0,
-  "material_color": "RED"
+  "material_color": "RED",
+  "texture_overrides" : {
+    "leaves": "tconstruct:block/slime/foliage/wart"
+  },
+  "model_overrides": {
+    "leaves": "tconstruct:block/slime/wart"
+  }
 }

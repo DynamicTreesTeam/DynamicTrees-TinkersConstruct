@@ -1,0 +1,24 @@
+{
+  "type": "mangrove",
+  "common_leaves": "dttconstruct:ender_slime",
+  "common_species": "dttconstruct:enderbark",
+  "primitive_log": "tconstruct:enderbark_log",
+  "primitive_stripped_log": "tconstruct:stripped_enderbark_log",
+  "max_branch_radius": 8,
+  "default_soil": "dttconstruct:enderbark_aerial_roots",
+  "primitive_root": "tconstruct:enderbark_roots",
+  "primitive_filled_root": "tconstruct:ender_enderbark_roots",
+  "primitive_covered_root": "tconstruct:ender_slime_dirt",
+  "root_system_acceptable_soils": ["slime_like"],
+  "model_overrides": {
+    "covered_root": "tconstruct:block/slime/dirt/ender/dirt"
+  },
+  "texture_overrides" : {
+    "branch": "tconstruct:block/wood/enderbark/log",
+    "branch_top": "tconstruct:block/wood/enderbark/log_top",
+    "stripped_branch": "tconstruct:block/wood/enderbark/stripped_log",
+    "stripped_branch_top": "tconstruct:block/wood/enderbark/stripped_log_top",
+    "roots_side": "tconstruct:block/wood/enderbark/roots",
+    "roots_top": "tconstruct:block/wood/enderbark/roots_top"
+  }
+}

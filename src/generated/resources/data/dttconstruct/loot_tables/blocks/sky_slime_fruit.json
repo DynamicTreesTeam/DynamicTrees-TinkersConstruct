@@ -1,15 +1,20 @@
 {
   "type": "minecraft:block",
+  "functions": [
+    {
+      "function": "minecraft:explosion_decay"
+    }
+  ],
   "pools": [
     {
-      "rolls": 1,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
             {
-              "condition": "minecraft:block_state_property",
               "block": "dttconstruct:sky_slime_fruit",
+              "condition": "minecraft:block_state_property",
               "properties": {
                 "age": "3"
               }
@@ -17,12 +22,8 @@
           ],
           "name": "tconstruct:sky_slime_ball"
         }
-      ]
-    }
-  ],
-  "functions": [
-    {
-      "function": "minecraft:explosion_decay"
+      ],
+      "rolls": 1.0
     }
   ]
 }

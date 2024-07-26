@@ -4,5 +4,11 @@
   "common_species": "dttconstruct:bloodshroom",
   "primitive_log": "tconstruct:bloodshroom_log",
   "primitive_stripped_log": "tconstruct:stripped_bloodshroom_log",
-  "max_branch_radius": 10
+  "max_branch_radius": 10,
+  "texture_overrides" : {
+    "branch": "tconstruct:block/wood/bloodshroom/log",
+    "branch_top": "tconstruct:block/wood/bloodshroom/log_top",
+    "stripped_branch": "tconstruct:block/wood/bloodshroom/stripped_log",
+    "stripped_branch_top": "tconstruct:block/wood/bloodshroom/stripped_log_top"
+  }
 }

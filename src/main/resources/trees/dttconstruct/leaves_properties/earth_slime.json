@@ -1,6 +1,12 @@
 {
   "primitive_leaves": "tconstruct:earth_slime_leaves",
-  "cell_kit": "dynamictrees:conifer",
+  "cell_kit": "dttconstruct:slime",
   "fire_spread": 0,
-  "flammability": 0
+  "flammability": 0,
+  "texture_overrides" : {
+    "leaves": "tconstruct:block/slime/foliage/leaves"
+  },
+  "model_overrides": {
+    "leaves": "tconstruct:block/slime/leaves"
+  }
 }
