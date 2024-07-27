@@ -1,5 +1,5 @@
 {
-  "parent": "dynamictrees:block/smartmodel/sapling",
+  "parent": "dynamictrees:block/smartmodel/mushroom_round",
   "render_type": "minecraft:cutout_mipped",
   "textures": {
     "cap": "dttconstruct:block/bloodshroom_cap",

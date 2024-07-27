@@ -50,7 +50,7 @@
   ],
   "trees": [
     {
-      "data": "minecraft:oak",
+      "data": "dttconstruct:any_tree",
       "weight": 1
     }
   ]

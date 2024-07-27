@@ -1,4 +1,4 @@
-// 1.19.2	2024-07-26T19:18:01.7013632	dttconstruct
+// 1.19.2	2024-07-26T22:28:17.9357668	dttconstruct
 82043ec6454106d117cb1ee11ecac54e84c121b8 data/dttconstruct/loot_tables/blocks/blood_slime_fruit.json
 1cce2342d47fd745946622c0a253f42ae417503e data/dttconstruct/loot_tables/blocks/blood_slime_wart.json
 6231b73855fec49744543576881f758e74410ab9 data/dttconstruct/loot_tables/blocks/earth_slime_leaves.json
@@ -21,5 +21,6 @@ c818063962870346cbaa2ca931cb2459c6a02f75 data/dttconstruct/loot_tables/trees/bra
 986afb00ce7ce1ff4ba0d792936eed67cb913515 data/dttconstruct/loot_tables/trees/leaves/sky_slime.json
 161b60db63815b6433ba9ef73aa4c2e527a9f741 data/dttconstruct/loot_tables/trees/roots/enderbark.json
 2817b03bc499a635ee2b36b840e9740776b4e382 data/dttconstruct/loot_tables/trees/voluntary/bloodshroom.json
+fd573a4cbd9b072da5870bc72b6d0e1d4597c2b9 data/dttconstruct/loot_tables/trees/voluntary/enderbark.json
 c3b15a16b7fddb9a31a3e467c426e034172e9e5e data/dttconstruct/loot_tables/trees/voluntary/greenheart.json
 314ce3907c3094221a5bdf6ecc4f8886317a00b5 data/dttconstruct/loot_tables/trees/voluntary/skyroot.json

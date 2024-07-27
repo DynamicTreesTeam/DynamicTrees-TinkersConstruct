@@ -6,12 +6,12 @@
 
   "species.dttconstruct.bloodshroom": "Bloodshroom",
   "species.dttconstruct.greenheart": "Greenheart",
-  "species.dttconstruct.enderslime": "Enderbark",
+  "species.dttconstruct.enderbark": "Enderbark",
   "species.dttconstruct.skyroot": "Skyroot",
 
   "item.dttconstruct.bloodshroom_seed": "Bloodshroom Cap",
   "item.dttconstruct.greenheart_seed": "Greenheart Seed",
-  "item.dttconstruct.enderslime_seed": "Enderbark Propagule",
+  "item.dttconstruct.enderbark_seed": "Enderbark Propagule",
   "item.dttconstruct.skyroot_seed": "Skyroot Seed",
 
   "block.tconstruct.ender_slime_sapling": "Enderbark Sapling",

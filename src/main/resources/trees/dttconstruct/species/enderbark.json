@@ -1,9 +1,12 @@
 {
   "family": "dttconstruct:enderbark",
-  "tapering": 0.2,
-  "signal_energy": 10.0,
-  "growth_rate": 0.9,
-  "lowest_branch_height": 4,
+  "tapering": 0.25,
+  "root_tapering": 0.2,
+  "signal_energy": 20.0,
+  "root_signal_energy": 20.0,
+  "up_probability": 8,
+  "lowest_branch_height": 2,
+  "growth_rate": 0.6,
   "leaves_properties": "dttconstruct:ender_slime",
   "drop_seeds": true,
   "environment_factors" : {
