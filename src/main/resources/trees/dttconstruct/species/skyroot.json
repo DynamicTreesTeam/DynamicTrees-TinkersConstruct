@@ -16,9 +16,9 @@
     }
   },
   "environment_factors" : {
-    "hot": 0.8,
-    "dry": 0.3,
-    "nether": 0.5
+    "#forge:is_hot": 0.8,
+    "#forge:is_dry": 0.3,
+    "#nether": 0.5
   },
   "primitive_sapling": "tconstruct:sky_slime_sapling",
   "acceptable_soils": [ "slime_like" ],

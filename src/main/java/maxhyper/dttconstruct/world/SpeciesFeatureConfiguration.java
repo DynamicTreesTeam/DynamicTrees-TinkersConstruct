@@ -5,7 +5,6 @@ import com.ferreusveritas.dynamictrees.util.LevelContext;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 
 public class SpeciesFeatureConfiguration implements FeatureConfiguration {

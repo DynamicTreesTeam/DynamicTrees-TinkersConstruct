@@ -1,5 +1,6 @@
 package maxhyper.dttconstruct.world;
 
+import com.ferreusveritas.dynamictrees.block.rooty.SoilHelper;
 import com.ferreusveritas.dynamictrees.tree.species.Species;
 import com.ferreusveritas.dynamictrees.util.LevelContext;
 import com.ferreusveritas.dynamictrees.util.SafeChunkBounds;
@@ -39,6 +40,12 @@ public class SingleDynamicTreeFeature extends Feature<SpeciesFeatureConfiguratio
         });
         BlockPos newOrigin = closestRing.get().below();
         Species species = context.config().getSpecies(levelContext, newOrigin);
+        if (!species.isAcceptableSoilForWorldgen(context.level().getBlockState(newOrigin))){
+            newOrigin = newOrigin.below();
+            if (!species.isAcceptableSoilForWorldgen(context.level().getBlockState(newOrigin))){
+                return false;
+            }
+        }
 
         if (!species.isValid()) return false;
 

@@ -10,8 +10,8 @@
   "growth_logic_kit": "nether_fungus",
   "leaves_properties": "dttconstruct:blood_slime",
   "environment_factors" : {
-    "cold": 0.5,
-    "wet": 0.8
+    "#forge:is_cold": 0.5,
+    "#forge:is_wet": 0.8
   },
   "primitive_sapling": "tconstruct:blood_slime_sapling",
   "acceptable_soils": [ "slime_like", "fungus_like", "dirt_like" ],

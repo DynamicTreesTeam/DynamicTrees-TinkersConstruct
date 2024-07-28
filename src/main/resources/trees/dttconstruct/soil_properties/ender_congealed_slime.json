@@ -1,0 +1,5 @@
+{
+  "primitive_soil": "tconstruct:ender_congealed_slime",
+  "acceptable_soils": [ "slime_like" ],
+  "substitute_soil" : "dttconstruct:ender_slime_dirt"
+}
