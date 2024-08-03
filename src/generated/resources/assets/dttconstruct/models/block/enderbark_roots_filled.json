@@ -1,7 +1,0 @@
-{
-  "loader": "dynamictrees:roots",
-  "textures": {
-    "bark": "tconstruct:block/wood/enderbark/roots",
-    "rings": "tconstruct:block/wood/enderbark/roots_top"
-  }
-}

@@ -1,5 +1,5 @@
 {
-  "type": "mangrove",
+  "type": "dttconstruct:slime_mangrove",
   "common_leaves": "dttconstruct:ender_slime",
   "common_species": "dttconstruct:enderbark",
   "primitive_log": "tconstruct:enderbark_log",
@@ -11,7 +11,7 @@
   "primitive_covered_root": "tconstruct:ender_slime_dirt",
   "root_system_acceptable_soils": ["slime_like"],
   "model_overrides": {
-    "covered_root": "tconstruct:block/slime/dirt/ender/dirt"
+    "covered_roots_block": "tconstruct:block/slime/dirt/ender/dirt"
   },
   "texture_overrides" : {
     "branch": "tconstruct:block/wood/enderbark/log",

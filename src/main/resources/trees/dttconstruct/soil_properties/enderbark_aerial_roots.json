@@ -1,5 +1,5 @@
 {
   "type": "aerial_roots",
   "primitive_soil": "tconstruct:enderbark_log",
-  "acceptable_soils": [ ]
+  "acceptable_soils": []
 }

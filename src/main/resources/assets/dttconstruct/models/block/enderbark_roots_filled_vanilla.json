@@ -1,0 +1,7 @@
+{
+  "loader": "dynamictrees:roots",
+  "textures": {
+    "bark": "dttconstruct:block/enderbark_roots_vanilla",
+    "rings": "dttconstruct:block/enderbark_roots_vanilla_top"
+  }
+}

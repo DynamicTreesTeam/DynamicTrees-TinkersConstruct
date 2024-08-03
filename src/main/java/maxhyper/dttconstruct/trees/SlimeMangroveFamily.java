@@ -5,12 +5,8 @@ import com.ferreusveritas.dynamictrees.block.branch.BasicRootsBlock;
 import com.ferreusveritas.dynamictrees.block.branch.BranchBlock;
 import com.ferreusveritas.dynamictrees.tree.family.Family;
 import com.ferreusveritas.dynamictrees.tree.family.MangroveFamily;
-import com.ferreusveritas.dynamictrees.util.Optionals;
 import maxhyper.dttconstruct.blocks.SlimeMangroveRootsBlock;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-
-import java.util.Optional;
 
 public class SlimeMangroveFamily extends MangroveFamily {
 

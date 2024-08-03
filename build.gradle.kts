@@ -32,6 +32,9 @@ repositories {
     maven("https://harleyoconnor.com/maven")
     maven("https://squiddev.cc/maven/")
     mavenLocal()
+    flatDir {
+        dir("libs")
+    }
 }
 
 val modName = property("modName")
@@ -87,7 +90,8 @@ sourceSets.main.get().resources {
 dependencies {
     minecraft("net.minecraftforge:forge:$mcVersion-${property("forgeVersion")}")
 
-    implementation(fg.deobf("com.ferreusveritas.dynamictrees:DynamicTrees-$mcVersion:$dtVersion"))
+    implementation(fg.deobf("lib:DynamicTrees:1.19.2-1.2.3.001"))
+    ///implementation(fg.deobf("com.ferreusveritas.dynamictrees:DynamicTrees-$mcVersion:$dtVersion"))
     implementation(fg.deobf("com.ferreusveritas.dynamictreesplus:DynamicTreesPlus-$mcVersion:${property("dynamicTreesPlusVersion")}"))
 
     implementation(fg.deobf("curse.maven:mantle-74924:5339977"))

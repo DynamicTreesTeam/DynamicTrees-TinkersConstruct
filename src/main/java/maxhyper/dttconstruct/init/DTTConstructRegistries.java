@@ -3,23 +3,25 @@ package maxhyper.dttconstruct.init;
 import com.ferreusveritas.dynamictrees.api.TreeHelper;
 import com.ferreusveritas.dynamictrees.api.cell.CellKit;
 import com.ferreusveritas.dynamictrees.api.registry.RegistryEvent;
+import com.ferreusveritas.dynamictrees.api.registry.TypeRegistryEvent;
 import com.ferreusveritas.dynamictrees.block.branch.BranchBlock;
+import com.ferreusveritas.dynamictrees.block.rooty.SoilProperties;
 import com.ferreusveritas.dynamictrees.systems.BranchConnectables;
+import com.ferreusveritas.dynamictrees.tree.family.Family;
 import maxhyper.dttconstruct.DynamicTreesTinkersConstruct;
 import maxhyper.dttconstruct.cellkits.DTCCellKits;
+import maxhyper.dttconstruct.trees.SlimeMangroveFamily;
 import maxhyper.dttconstruct.world.BiomeSpeciesFeatureConfiguration;
 import maxhyper.dttconstruct.world.SingleDynamicTreeFeature;
 import maxhyper.dttconstruct.world.SpeciesFeatureConfiguration;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -77,5 +79,15 @@ public class DTTConstructRegistries {
         DTCCellKits.register(event.getRegistry());
     }
 
+
+    @SubscribeEvent
+    public static void registerFamilyTypes (final TypeRegistryEvent<Family> event) {
+        event.registerType(DynamicTreesTinkersConstruct.location("slime_mangrove"), SlimeMangroveFamily.TYPE);
+    }
+
+    @SubscribeEvent
+    public static void registerSoilPropertiesTypes (final TypeRegistryEvent<SoilProperties> event) {
+
+    }
 
 }

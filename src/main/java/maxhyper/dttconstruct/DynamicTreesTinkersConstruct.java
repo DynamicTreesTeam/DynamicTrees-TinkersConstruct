@@ -6,6 +6,7 @@ import com.ferreusveritas.dynamictrees.block.leaves.LeavesProperties;
 import com.ferreusveritas.dynamictrees.block.rooty.SoilProperties;
 import com.ferreusveritas.dynamictrees.tree.family.Family;
 import com.ferreusveritas.dynamictrees.tree.species.Species;
+import maxhyper.dttconstruct.init.DTConstructClient;
 import maxhyper.dttconstruct.init.DTTConstructRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -48,7 +49,7 @@ public class DynamicTreesTinkersConstruct
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-
+        DTConstructClient.setup();
     }
 
 //    public static void replaceNyliumFungiFeatures() {
@@ -68,7 +69,7 @@ public class DynamicTreesTinkersConstruct
         GatherDataHelper.gatherAllData(
                 MOD_ID,
                 event,
-                //SoilProperties.REGISTRY,
+                SoilProperties.REGISTRY,
                 Family.REGISTRY,
                 Species.REGISTRY,
                 LeavesProperties.REGISTRY

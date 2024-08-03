@@ -1,0 +1,35 @@
+{
+  "multipart": [
+    {
+      "when": {"layer": "exposed"},
+      "apply": {"model": "dttconstruct:block/enderbark_roots"}
+    },
+
+    {
+      "when": {"layer": "filled", "dirt_type":"earth"},
+      "apply": {"model": "dttconstruct:block/enderbark_roots_filled_earth"}
+    },
+    {
+      "when": {"layer": "filled", "dirt_type":"sky"},
+      "apply": {"model": "dttconstruct:block/enderbark_roots_filled_sky"}
+    },
+    {
+      "when": {"layer": "filled", "dirt_type":"ichor"},
+      "apply": {"model": "dttconstruct:block/enderbark_roots_filled_ichor"}
+    },
+    {
+      "when": {"layer": "filled", "dirt_type":"ender"},
+      "apply": {"model": "dttconstruct:block/enderbark_roots_filled_ender"}
+    },
+    {
+      "when": {"layer": "filled", "dirt_type":"vanilla"},
+      "apply": {"model": "dttconstruct:block/enderbark_roots_filled_vanilla"}
+    },
+
+
+    {
+      "when": {"layer": "covered", "grass_type": "none", "dirt_type":"vanilla"},
+      "apply": {"model": "dttconstruct:block/enderbark_roots_filled_vanilla"}
+    }
+  ]
+}

@@ -1,4 +1,7 @@
 {
   "primitive_soil": "tconstruct:blood_earth_slime_grass",
-  "acceptable_soils": [ "slime_like" ]
+  "acceptable_soils": [ "slime_like" ],
+  "model_overrides": {
+    "soil_block": "tconstruct:block/slime/dirt/earth/nylium"
+  }
 }
