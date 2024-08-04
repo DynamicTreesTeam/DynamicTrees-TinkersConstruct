@@ -1,35 +1,119 @@
 {
-  "multipart": [
-    {
-      "when": {"layer": "exposed"},
-      "apply": {"model": "dttconstruct:block/enderbark_roots"}
+  "variants": {
+    "layer=covered,dirt_type=earth,grass_type=none": {
+      "model": "tconstruct:block/slime/dirt/earth/dirt"
+    },
+    "layer=covered,dirt_type=sky,grass_type=none": {
+      "model": "tconstruct:block/slime/dirt/sky/dirt"
+    },
+    "layer=covered,dirt_type=ichor,grass_type=none": {
+      "model": "tconstruct:block/slime/dirt/ichor/dirt"
+    },
+    "layer=covered,dirt_type=ender,grass_type=none": {
+      "model": "tconstruct:block/slime/dirt/ender/dirt"
+    },
+    "layer=covered,dirt_type=vanilla,grass_type=none": {
+      "model": "minecraft:block/dirt"
     },
 
-    {
-      "when": {"layer": "filled", "dirt_type":"earth"},
-      "apply": {"model": "dttconstruct:block/enderbark_roots_filled_earth"}
+    "layer=covered,dirt_type=earth,grass_type=blood": {
+      "model": "tconstruct:block/slime/dirt/earth/nylium"
     },
-    {
-      "when": {"layer": "filled", "dirt_type":"sky"},
-      "apply": {"model": "dttconstruct:block/enderbark_roots_filled_sky"}
+    "layer=covered,dirt_type=sky,grass_type=blood": {
+      "model": "tconstruct:block/slime/dirt/sky/nylium"
     },
-    {
-      "when": {"layer": "filled", "dirt_type":"ichor"},
-      "apply": {"model": "dttconstruct:block/enderbark_roots_filled_ichor"}
+    "layer=covered,dirt_type=ichor,grass_type=blood": {
+      "model": "tconstruct:block/slime/dirt/ichor/nylium"
     },
-    {
-      "when": {"layer": "filled", "dirt_type":"ender"},
-      "apply": {"model": "dttconstruct:block/enderbark_roots_filled_ender"}
+    "layer=covered,dirt_type=ender,grass_type=blood": {
+      "model": "tconstruct:block/slime/dirt/ender/nylium"
     },
-    {
-      "when": {"layer": "filled", "dirt_type":"vanilla"},
-      "apply": {"model": "dttconstruct:block/enderbark_roots_filled_vanilla"}
+    "layer=covered,dirt_type=vanilla,grass_type=blood": {
+      "model": "tconstruct:block/slime/dirt/vanilla/nylium"
     },
 
+    "layer=covered,dirt_type=earth,grass_type=earth": {
+      "model": "tconstruct:block/slime/dirt/earth/grass"
+    },
+    "layer=covered,dirt_type=sky,grass_type=earth": {
+      "model": "tconstruct:block/slime/dirt/sky/grass"
+    },
+    "layer=covered,dirt_type=ichor,grass_type=earth": {
+      "model": "tconstruct:block/slime/dirt/ichor/grass"
+    },
+    "layer=covered,dirt_type=ender,grass_type=earth": {
+      "model": "tconstruct:block/slime/dirt/ender/grass"
+    },
+    "layer=covered,dirt_type=vanilla,grass_type=earth": {
+      "model": "tconstruct:block/slime/dirt/vanilla/grass"
+    },
 
-    {
-      "when": {"layer": "covered", "grass_type": "none", "dirt_type":"vanilla"},
-      "apply": {"model": "dttconstruct:block/enderbark_roots_filled_vanilla"}
+    "layer=covered,dirt_type=earth,grass_type=sky": {
+      "model": "tconstruct:block/slime/dirt/earth/grass"
+    },
+    "layer=covered,dirt_type=sky,grass_type=sky": {
+      "model": "tconstruct:block/slime/dirt/sky/grass"
+    },
+    "layer=covered,dirt_type=ichor,grass_type=sky": {
+      "model": "tconstruct:block/slime/dirt/ichor/grass"
+    },
+    "layer=covered,dirt_type=ender,grass_type=sky": {
+      "model": "tconstruct:block/slime/dirt/ender/grass"
+    },
+    "layer=covered,dirt_type=vanilla,grass_type=sky": {
+      "model": "tconstruct:block/slime/dirt/vanilla/grass"
+    },
+
+    "layer=covered,dirt_type=earth,grass_type=ichor": {
+      "model": "tconstruct:block/slime/dirt/earth/grass"
+    },
+    "layer=covered,dirt_type=sky,grass_type=ichor": {
+      "model": "tconstruct:block/slime/dirt/sky/grass"
+    },
+    "layer=covered,dirt_type=ichor,grass_type=ichor": {
+      "model": "tconstruct:block/slime/dirt/ichor/grass"
+    },
+    "layer=covered,dirt_type=ender,grass_type=ichor": {
+      "model": "tconstruct:block/slime/dirt/ender/grass"
+    },
+    "layer=covered,dirt_type=vanilla,grass_type=ichor": {
+      "model": "tconstruct:block/slime/dirt/vanilla/grass"
+    },
+
+    "layer=covered,dirt_type=earth,grass_type=ender": {
+      "model": "tconstruct:block/slime/dirt/earth/grass"
+    },
+    "layer=covered,dirt_type=sky,grass_type=ender": {
+      "model": "tconstruct:block/slime/dirt/sky/grass"
+    },
+    "layer=covered,dirt_type=ichor,grass_type=ender": {
+      "model": "tconstruct:block/slime/dirt/ichor/grass"
+    },
+    "layer=covered,dirt_type=ender,grass_type=ender": {
+      "model": "tconstruct:block/slime/dirt/ender/grass"
+    },
+    "layer=covered,dirt_type=vanilla,grass_type=ender": {
+      "model": "tconstruct:block/slime/dirt/vanilla/grass"
+    },
+
+    "layer=filled,dirt_type=earth": {
+      "model": "dttconstruct:block/enderbark_roots_filled_earth"
+    },
+    "layer=filled,dirt_type=sky": {
+      "model": "dttconstruct:block/enderbark_roots_filled_sky"
+    },
+    "layer=filled,dirt_type=ichor": {
+      "model": "dttconstruct:block/enderbark_roots_filled_ichor"
+    },
+    "layer=filled,dirt_type=ender": {
+      "model": "dttconstruct:block/enderbark_roots_filled_ender"
+    },
+    "layer=filled,dirt_type=vanilla": {
+      "model": "dttconstruct:block/enderbark_roots_filled_vanilla"
+    },
+
+    "layer=exposed": {
+      "model": "dttconstruct:block/enderbark_roots"
     }
-  ]
+  }
 }

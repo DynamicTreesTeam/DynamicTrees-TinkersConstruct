@@ -1,16 +1,20 @@
 package maxhyper.dttconstruct.blocks;
 
 import com.ferreusveritas.dynamictrees.DynamicTrees;
+import com.ferreusveritas.dynamictrees.api.TreeHelper;
 import com.ferreusveritas.dynamictrees.block.branch.BasicRootsBlock;
+import com.ferreusveritas.dynamictrees.tree.family.Family;
 import maxhyper.dttconstruct.trees.SlimeMangroveFamily;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
@@ -18,10 +22,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -31,11 +37,12 @@ import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.tconstruct.world.TinkerWorld;
 import slimeknights.tconstruct.world.block.DirtType;
 import slimeknights.tconstruct.world.block.FoliageType;
+import slimeknights.tconstruct.world.block.SlimeDirtBlock;
+import slimeknights.tconstruct.world.client.SlimeColorizer;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
 public class SlimeMangroveRootsBlock extends BasicRootsBlock {
 
@@ -53,7 +60,7 @@ public class SlimeMangroveRootsBlock extends BasicRootsBlock {
         }
 
         public static GrassType getFromFoliage (FoliageType foliageType){
-            return Enum.valueOf(GrassType.class, foliageType.getSerializedName());
+            return Enum.valueOf(GrassType.class, foliageType.getSerializedName().toUpperCase(Locale.ENGLISH));
         }
 
         public FoliageType asFoliage(){
@@ -73,7 +80,7 @@ public class SlimeMangroveRootsBlock extends BasicRootsBlock {
         super(name, properties.randomTicks());
         registerDefaultState(defaultBlockState()
                 .setValue(GRASS_TYPE, GrassType.NONE)
-                .setValue(DIRT_TYPE, DirtType.EARTH));
+                .setValue(DIRT_TYPE, DirtType.VANILLA));
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
@@ -91,7 +98,7 @@ public class SlimeMangroveRootsBlock extends BasicRootsBlock {
         DirtType slime = state.getValue(DIRT_TYPE);
         GrassType grass = state.getValue(GRASS_TYPE);
         if (grass == GrassType.NONE){
-            return TinkerWorld.slimeDirt.get(slime);
+            return TinkerWorld.allDirt.get(slime);
         }
         return TinkerWorld.slimeGrass.get(slime).get(grass.asFoliage());
     }
@@ -121,20 +128,30 @@ public class SlimeMangroveRootsBlock extends BasicRootsBlock {
         boolean replacingWater = currentState.getFluidState() == Fluids.WATER.getSource(false);
         boolean replacingGround = this.getFamily().isAcceptableSoilForRootSystem(currentState);
         boolean setWaterlogged = replacingWater && !replacingGround;
-        Layer layer = currentState.is(this) ? currentState.getValue(LAYER) : (replacingGround ? BasicRootsBlock.Layer.COVERED : BasicRootsBlock.Layer.EXPOSED);
-        DirtType slimeType = DirtType.EARTH;
-        GrassType grassType = GrassType.NONE;
+        boolean isFullBlock = radius >= 8;
+        Layer layer;
+        if (currentState.is(this)){
+            layer = currentState.getValue(LAYER);
+            if (layer == Layer.COVERED && isFullBlock){
+                layer = Layer.FILLED;
+            }
+        } else layer = replacingGround ? Layer.COVERED : Layer.EXPOSED;
+
+        DirtType dirtType = currentState.is(this) ? currentState.getValue(DIRT_TYPE) : DirtType.VANILLA;
+        GrassType grassType = currentState.is(this) ? currentState.getValue(GRASS_TYPE) : GrassType.NONE;
         if (replacingGround){
             Pair<DirtType, GrassType> pair = getSlimeFromState(currentState);
-            slimeType = pair.getA();
-            if (canBeGrassy(level, pos)){
-                grassType = pair.getB();
+            if (pair != null){
+                dirtType = pair.getA();
+                if (canBeGrassy(level, pos) && !isFullBlock){
+                    grassType = pair.getB();
+                }
             }
         }
         level.setBlock(pos, this.getStateForRadius(radius)
                 .setValue(LAYER, layer)
                 .setValue(WATERLOGGED, setWaterlogged)
-                .setValue(DIRT_TYPE, slimeType)
+                .setValue(DIRT_TYPE, dirtType)
                 .setValue(GRASS_TYPE, grassType), flags);
 
         destroyMode = DynamicTrees.DestroyMode.SLOPPY;
@@ -161,39 +178,42 @@ public class SlimeMangroveRootsBlock extends BasicRootsBlock {
             }
         }
 
-        return new Pair<>(DirtType.EARTH, GrassType.NONE);
+        return null;
     }
 
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (!isFullBlock(state)) {
+            Layer layer = Layer.COVERED;
+            if (state.getValue(RADIUS) >= 8){
+                if (state.getValue(LAYER) == Layer.EXPOSED)
+                    layer = Layer.FILLED;
+                else layer = null;
+            }
+            if (layer != null) {
+                ItemStack handStack = player.getItemInHand(hand);
+                if (handStack.getItem() instanceof BlockItem blockItem){
+                    Pair<DirtType, GrassType> coverProperties = getSlimeFromState(blockItem.getBlock().defaultBlockState());
+                    if (coverProperties != null) {
+                        BlockState newState = state
+                                .setValue(LAYER, layer)
+                                .setValue(WATERLOGGED, false)
+                                .setValue(DIRT_TYPE, coverProperties.getA())
+                                .setValue(GRASS_TYPE, coverProperties.getB());
+                        if (this.canPlace(player, level, pos, newState)) {
+                            level.setBlock(pos, newState, 3);
+                            if (!player.isCreative()) {
+                                handStack.shrink(1);
+                            }
 
-    @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        super.randomTick(state, level, pos, random);
-//        //if it's not covered don't tick.
-//        if (!state.is(this) || state.getValue(LAYER) != Layer.COVERED) return;
-//        int requiredLight = getFamily().getGrassSpreadRequiredLight();
-//        //this is a similar behaviour to vanilla grass spreading but inverted to be handled by the dirt block
-//        if (!level.isClientSide) {
-//            if (!level.isAreaLoaded(pos, 3)) {
-//                return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
-//            }
-//            if (!canBeGrassy(level, pos)){
-//                level.setBlock(pos, state.setValue(GRASSY, false), 3);
-//            } else if (level.getMaxLocalRawBrightness(pos.above()) >= requiredLight) {
-//                for (int i = 0; i < 4; ++i) {
-//                    BlockPos thatPos = pos.offset(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
-//
-//                    if (!level.hasChunkAt(thatPos)) { return; }
-//                    BlockState thatState = level.getBlockState(thatPos);
-//
-//                    Block block = getFamily().getPrimitiveGrassyRoots().orElse(null);
-//                    if (block != null && thatState.getBlock() == block) {
-//                        level.setBlock(pos, state.setValue(GRASSY, true), 3);
-//                        return;
-//                    }
-//                }
-//            }
-//        }
-
+                            level.playSound(null, pos, blockItem.getBlock().getSoundType(state, level, pos, player).getPlaceSound(), SoundSource.BLOCKS, 1.0F, 0.8F);
+                            return InteractionResult.SUCCESS;
+                        }
+                    }
+                }
+            }
+        }
+        ItemStack heldItem = player.getItemInHand(hand);
+        return TreeHelper.getTreePart(state).getFamily(state, level, pos).onTreeActivated(new Family.TreeActivationContext(level, TreeHelper.findRootNode(level, pos), pos, state, player, hand, heldItem, hitResult)) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
     }
 
     //to-do: port to base DT
@@ -221,7 +241,16 @@ public class SlimeMangroveRootsBlock extends BasicRootsBlock {
     public int foliageColorMultiplier(BlockState state, BlockAndTintGetter level, BlockPos pos) {
         GrassType grass = state.getValue(GRASS_TYPE);
         if (grass == GrassType.NONE) return 1;
-        return grass.asFoliage().getColor();
+        return SlimeColorizer.getColorForPos(pos, grass.asFoliage());
     }
 
+    @Override
+    public BlockState getStateForDecay(BlockState state, LevelAccessor level, BlockPos pos) {
+        boolean waterlogged = state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED);
+        Layer layer = state.hasProperty(LAYER) ? state.getValue(LAYER) : BasicRootsBlock.Layer.EXPOSED;
+        if (layer == Layer.COVERED){
+            return getPrimitiveSlimeDirt(state).defaultBlockState();
+        } else
+            return waterlogged ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
+    }
 }

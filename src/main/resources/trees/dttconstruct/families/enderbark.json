@@ -9,7 +9,7 @@
   "primitive_root": "tconstruct:enderbark_roots",
   "primitive_filled_root": "tconstruct:ender_enderbark_roots",
   "primitive_covered_root": "tconstruct:ender_slime_dirt",
-  "root_system_acceptable_soils": ["slime_like"],
+  "root_system_acceptable_soils": ["slime_like", "dirt_like"],
   "model_overrides": {
     "covered_roots_block": "tconstruct:block/slime/dirt/ender/dirt"
   },
