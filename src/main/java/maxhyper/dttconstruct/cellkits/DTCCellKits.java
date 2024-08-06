@@ -8,6 +8,7 @@ import com.ferreusveritas.dynamictrees.api.cell.CellSolver;
 import com.ferreusveritas.dynamictrees.api.registry.Registry;
 import com.ferreusveritas.dynamictrees.cell.*;
 import com.ferreusveritas.dynamictrees.util.SimpleVoxmap;
+import maxhyper.dttconstruct.DynamicTreesTinkersConstruct;
 
 public class DTCCellKits {
 
@@ -15,7 +16,7 @@ public class DTCCellKits {
         registry.registerAll(SLIME);
     }
 
-    public static final CellKit SLIME = new CellKit(DynamicTrees.location("slime")) {
+    public static final CellKit SLIME = new CellKit(DynamicTreesTinkersConstruct.location("slime")) {
         private final Cell coniferBranch = new ConiferBranchCell();
         private final Cell[] coniferLeafCells;
         private final CellKits.BasicSolver coniferSolver;

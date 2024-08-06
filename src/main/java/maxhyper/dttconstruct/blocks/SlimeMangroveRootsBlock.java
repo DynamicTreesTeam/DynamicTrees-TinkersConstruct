@@ -3,6 +3,7 @@ package maxhyper.dttconstruct.blocks;
 import com.ferreusveritas.dynamictrees.DynamicTrees;
 import com.ferreusveritas.dynamictrees.api.TreeHelper;
 import com.ferreusveritas.dynamictrees.block.branch.BasicRootsBlock;
+import com.ferreusveritas.dynamictrees.block.rooty.SoilHelper;
 import com.ferreusveritas.dynamictrees.tree.family.Family;
 import maxhyper.dttconstruct.trees.SlimeMangroveFamily;
 import net.minecraft.core.BlockPos;
@@ -25,6 +26,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -34,10 +37,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 import oshi.util.tuples.Pair;
 import slimeknights.mantle.registration.object.EnumObject;
+import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.world.TinkerWorld;
 import slimeknights.tconstruct.world.block.DirtType;
 import slimeknights.tconstruct.world.block.FoliageType;
-import slimeknights.tconstruct.world.block.SlimeDirtBlock;
 import slimeknights.tconstruct.world.client.SlimeColorizer;
 
 import javax.annotation.Nullable;
@@ -103,10 +106,6 @@ public class SlimeMangroveRootsBlock extends BasicRootsBlock {
         return TinkerWorld.slimeGrass.get(slime).get(grass.asFoliage());
     }
 
-    private Block getPrimitiveAny (BlockState state){
-        return state.getValue(LAYER).getPrimitive(getFamily()).orElse(null);
-    }
-
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
 
@@ -114,8 +113,8 @@ public class SlimeMangroveRootsBlock extends BasicRootsBlock {
             level.setBlock(pos, state.setValue(LAYER, Layer.FILLED).setValue(GRASS_TYPE, GrassType.NONE), level.isClientSide ? 11 : 3);
             this.spawnDestroyParticles(level, player, pos, state);
             level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-            Block primitive = getPrimitiveAny(state);
-            if (!player.isCreative() && primitive != null) dropResources(getPrimitiveSlimeDirt(state).defaultBlockState(), level, pos, null, player, player.getMainHandItem());
+            Block primitive = getPrimitiveSlimeDirt(state);
+            if (!player.isCreative() && primitive != null) dropResources(primitive.defaultBlockState(), level, pos, null, player, player.getMainHandItem());
             return false;
         }
         return this.removedByEntity(state, level, pos, player);
@@ -125,7 +124,7 @@ public class SlimeMangroveRootsBlock extends BasicRootsBlock {
     public int setRadius(LevelAccessor level, BlockPos pos, int radius, @javax.annotation.Nullable Direction originDir, int flags) {
         destroyMode = DynamicTrees.DestroyMode.SET_RADIUS;
         BlockState currentState = level.getBlockState(pos);
-        boolean replacingWater = currentState.getFluidState() == Fluids.WATER.getSource(false);
+        boolean replacingWater = currentState.getFluidState() == getFluid(currentState).getSource(false);
         boolean replacingGround = this.getFamily().isAcceptableSoilForRootSystem(currentState);
         boolean setWaterlogged = replacingWater && !replacingGround;
         boolean isFullBlock = radius >= 8;
@@ -164,7 +163,11 @@ public class SlimeMangroveRootsBlock extends BasicRootsBlock {
         return !upState.isCollisionShapeFullBlock(level, upPos) && upState.getFluidState().isEmpty();
     }
 
-    private Pair<DirtType, GrassType> getSlimeFromState (BlockState state){
+    private Pair<DirtType, GrassType> getSlimeFromState (BlockState state1){
+        BlockState state = state1;
+        if (SoilHelper.isSoilRegistered(state.getBlock()) && SoilHelper.getProperties(state.getBlock()).hasSubstitute() && SoilHelper.getProperties(state.getBlock()).getBlock().isPresent()){
+            state = SoilHelper.getProperties(state.getBlock()).getBlock().get().getPrimitiveSoilBlock().defaultBlockState();
+        }
         for (Map.Entry<DirtType, EnumObject<FoliageType, Block>> entry : TinkerWorld.slimeGrass.entrySet()){
             for (FoliageType type : FoliageType.values()){
                 if (state.is(entry.getValue().get(type))){
@@ -251,6 +254,36 @@ public class SlimeMangroveRootsBlock extends BasicRootsBlock {
         if (layer == Layer.COVERED){
             return getPrimitiveSlimeDirt(state).defaultBlockState();
         } else
-            return waterlogged ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
+            return waterlogged ? getFluid(state).defaultFluidState().createLegacyBlock() : Blocks.AIR.defaultBlockState();
     }
+
+    @Deprecated
+    public float getDestroyProgress(BlockState pState, Player pPlayer, BlockGetter pLevel, BlockPos pPos) {
+        if (pState.hasProperty(LAYER) && pState.getValue(LAYER) == Layer.COVERED){
+            Block slimeDirt = getPrimitiveSlimeDirt(pState);
+            return slimeDirt.getDestroyProgress(slimeDirt.defaultBlockState(), pPlayer, pLevel, pPos);
+        }
+        return super.getDestroyProgress(pState, pPlayer, pLevel, pPos);
+    }
+
+    private FlowingFluid getFluid(BlockState state){
+        return TinkerFluids.enderSlime.get();
+    }
+
+    public FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? getFluid(state).getSource(false) : super.getFluidState(state);
+    }
+
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.getValue(WATERLOGGED)) {
+            level.scheduleTick(currentPos, getFluid(stateIn), getFluid(stateIn).getTickDelay(level));
+        }
+
+        return super.updateShape(stateIn, facing, facingState, level, currentPos, facingPos);
+    }
+
+    public boolean canPlaceLiquid(BlockGetter pLevel, BlockPos pPos, BlockState pState, Fluid pFluid) {
+        return !this.isFullBlock(pState) && !(Boolean)pState.getValue(BlockStateProperties.WATERLOGGED) && pFluid == getFluid(pState);
+    }
+
 }

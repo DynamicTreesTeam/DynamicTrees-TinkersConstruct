@@ -1,6 +1,6 @@
 package maxhyper.dttconstruct.world;
 
-import com.ferreusveritas.dynamictrees.block.rooty.SoilHelper;
+import com.ferreusveritas.dynamictrees.api.TreeHelper;
 import com.ferreusveritas.dynamictrees.tree.species.Species;
 import com.ferreusveritas.dynamictrees.util.LevelContext;
 import com.ferreusveritas.dynamictrees.util.SafeChunkBounds;
@@ -38,17 +38,31 @@ public class SingleDynamicTreeFeature extends Feature<SpeciesFeatureConfiguratio
                 closestRingRad.set(disc.radius);
             }
         });
+        boolean generate = true;
         BlockPos newOrigin = closestRing.get().below();
+        if (TreeHelper.isTreePart(levelContext.accessor().getBlockState(newOrigin.above(4)))) generate = false;
         Species species = context.config().getSpecies(levelContext, newOrigin);
         if (!species.isAcceptableSoilForWorldgen(context.level().getBlockState(newOrigin))){
             newOrigin = newOrigin.below();
             if (!species.isAcceptableSoilForWorldgen(context.level().getBlockState(newOrigin))){
-                return false;
+                generate = false;
             }
         }
 
-        if (!species.isValid()) return false;
+        if (!species.isValid()) generate = false;
 
-        return species.generate(new GenerationContext(levelContext, species, newOrigin, newOrigin.mutable(), context.level().getBiome(newOrigin), Direction.Plane.HORIZONTAL.getRandomDirection(context.random()), closestRingRad.get(), SafeChunkBounds.ANY_WG));
+        if (generate){
+            generate = generateTree(species, levelContext, newOrigin, closestRingRad.get());
+        }
+        //If it fails generate a radius 2 tree (lowest chance to clash with nearby tree)
+        BlockPos soil = context.origin().below();
+        if (!generate && species.isAcceptableSoilForWorldgen(levelContext.level(), soil, levelContext.accessor().getBlockState(soil))){
+            return generateTree(species, levelContext, soil, 2);
+        }
+        return generate;
+    }
+
+    private boolean generateTree(Species species, LevelContext context, BlockPos pos, int radius){
+        return species.generate(new GenerationContext(context, species, pos, pos.mutable(), context.accessor().getBiome(pos), Direction.Plane.HORIZONTAL.getRandomDirection(context.accessor().getRandom()), radius, SafeChunkBounds.ANY_WG));
     }
 }
