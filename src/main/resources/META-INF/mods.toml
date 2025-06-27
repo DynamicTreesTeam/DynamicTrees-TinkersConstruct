@@ -26,27 +26,27 @@ side = "BOTH"
 [[dependencies.dttconstruct]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19,1.20)"
+versionRange = "[1.20,1.21)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.dttconstruct]]
 modId = "dynamictrees"
 mandatory = true
-versionRange = "[1.1.0-BETA7,)"
+versionRange = "[1.20.1-1.4.5,)"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.dttconstruct]]
 modId = "dynamictreesplus"
 mandatory = false
-versionRange = "[1.1.0,)"
+versionRange = "[1.20.1-1.2.1,)"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.dttconstruct]]
 modId = "tconstruct"
 mandatory = true
-versionRange = "[3.8.0.0,)"
+versionRange = "[3.10.0.0,)"
 ordering = "AFTER"
 side = "BOTH"

@@ -90,18 +90,17 @@ sourceSets.main.get().resources {
 dependencies {
     minecraft("net.minecraftforge:forge:$mcVersion-${property("forgeVersion")}")
 
-    implementation(fg.deobf("lib:DynamicTrees:1.19.2-1.2.3.002"))
-    ///implementation(fg.deobf("com.ferreusveritas.dynamictrees:DynamicTrees-$mcVersion:$dtVersion"))
+    implementation(fg.deobf("com.ferreusveritas.dynamictrees:DynamicTrees-$mcVersion:$dtVersion"))
     implementation(fg.deobf("com.ferreusveritas.dynamictreesplus:DynamicTreesPlus-$mcVersion:${property("dynamicTreesPlusVersion")}"))
 
-    implementation(fg.deobf("curse.maven:mantle-74924:5339977"))
-    implementation(fg.deobf("curse.maven:tinkers-construct-74072:5358052"))
+    implementation(fg.deobf("curse.maven:mantle-74924:6642332"))
+    implementation(fg.deobf("curse.maven:tinkers-construct-74072:6635554"))
 
-    runtimeOnly(fg.deobf("curse.maven:jade-324717:4433884"))
-    runtimeOnly(fg.deobf("curse.maven:jei-238222:4615177"))
-    runtimeOnly(fg.deobf("org.squiddev:cc-tweaked-$mcVersion:${property("ccVersion")}"))
-    runtimeOnly(fg.deobf("com.harleyoconnor.suggestionproviderfix:SuggestionProviderFix-1.19:${property("suggestionProviderFixVersion")}"))
-    runtimeOnly(fg.deobf("vazkii.patchouli:Patchouli:${property("patchouliVersion")}"))
+    runtimeOnly(fg.deobf("curse.maven:jade-324717:5072729"))
+    runtimeOnly(fg.deobf("curse.maven:jei-238222:6600311"))
+    runtimeOnly(fg.deobf("curse.maven:cc-tweaked-282001:5118388"))
+    runtimeOnly(fg.deobf("curse.maven:suggestion-provider-fix-469647:4591193"))
+    runtimeOnly(fg.deobf("curse.maven:patchouli-306770:6164575"))
 }
 
 tasks.jar {

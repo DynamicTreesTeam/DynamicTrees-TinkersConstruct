@@ -34,7 +34,7 @@ public class DynamicTreesTinkersConstruct
 
         RegistryHandler.setup(MOD_ID);
 
-        DTTConstructRegistries.setup();
+        DTTConstructRegistries.setup(modBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
