@@ -1,10 +1,5 @@
 {
   "type": "minecraft:block",
-  "functions": [
-    {
-      "function": "minecraft:explosion_decay"
-    }
-  ],
   "pools": [
     {
       "bonus_rolls": 0.0,
@@ -13,17 +8,23 @@
           "type": "minecraft:item",
           "conditions": [
             {
-              "block": "dttconstruct:green_slime_fruit",
+              "block": "dttconstruct:ender_slime",
               "condition": "minecraft:block_state_property",
               "properties": {
                 "age": "3"
               }
             }
           ],
-          "name": "minecraft:slime_ball"
+          "functions": [
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "tconstruct:ender_slime_ball"
         }
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "dttconstruct:blocks/ender_slime"
 }

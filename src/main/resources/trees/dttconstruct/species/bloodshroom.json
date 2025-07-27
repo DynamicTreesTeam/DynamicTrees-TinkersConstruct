@@ -8,7 +8,7 @@
   "growth_rate": 1,
   "soil_longevity": 3,
   "growth_logic_kit": "nether_fungus",
-  "leaves_properties": "dttconstruct:blood_slime",
+  "leaves_properties": "dttconstruct:ichor_slime",
   "environment_factors" : {
     "#forge:is_cold": 0.5,
     "#forge:is_wet": 0.8
@@ -21,7 +21,7 @@
     "sapling": "dynamictrees:block/smartmodel/mushroom_round"
   },
   "fruits": [
-    "dttconstruct:blood_slime"
+    "dttconstruct:ichor_slime"
   ],
   "features" : [
     "clear_volume",
