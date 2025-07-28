@@ -1,0 +1,20 @@
+{
+  "block.dttconstruct.bloodshroom_branch": "Champisang",
+  "block.dttconstruct.greenheart_branch": "Coeurvert",
+  "block.dttconstruct.skyroot_branch": "Célébène",
+  "block.dttconstruct.enderbark_branch": "Écorce de l'Ender",
+  "block.dttconstruct.enderbark_roots": "Écorce de l'Ender",
+
+  "species.dttconstruct.bloodshroom": "Champisang",
+  "species.dttconstruct.greenheart": "Coeurvert",
+  "species.dttconstruct.enderbark": "Écorce de l'Ender",
+  "species.dttconstruct.skyroot": "Célébène",
+
+  "item.dttconstruct.bloodshroom_seed": "Chapeau de champisang",
+  "item.dttconstruct.greenheart_seed": "Graine de coeurvert",
+  "item.dttconstruct.enderbark_seed": "Propagule d'écorce de l'Ender",
+  "item.dttconstruct.skyroot_seed": "Graine de célébène",
+
+  "block.tconstruct.ender_slime_sapling": "Pousse d'écorce de l'Ender",
+  "block.tconstruct.potted_ender_slime_sapling": "Pousse d'écorce de l'Ender en pot"
+}
